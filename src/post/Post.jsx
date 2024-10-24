@@ -17,7 +17,7 @@ const Post = (props) => {
                 vertical
                 style={{ breakInside: "avoid", cursor: "pointer", marginBottom: "40px" }}
                 onClick={() => handleViewPost()}
-                onMouseOver={() => { console.log("touch", post.username) }}
+                onMouseOver={() => { }}
             >
                 <img style={{
                     width: "100%",

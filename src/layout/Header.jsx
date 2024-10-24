@@ -34,7 +34,6 @@ const Header = () => {
     }
     const confirmLogOut = (e) => {
         handleLogOut()
-        console.log(e);
         message.success('Logout Success');
     };
     return (

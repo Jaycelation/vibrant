@@ -1,14 +1,16 @@
-import { Button, Col, Flex, Row, Input } from "antd";
+import { Button, Col, Flex, Row, Input, Typography } from "antd";
 import Post from "../post/Post";
 import { useState, useEffect, useContext } from "react";
 import { fetchListPhotosAPI, searchPhotosAPI } from "../services/services.api";
 import { PlusOutlined } from "@ant-design/icons";
 import { MainContext } from "../context/context";
+const { Text } = Typography;
 const { Search } = Input;
 const Main = () => {
     const [listCards, setlistCards] = useState([])
     const { setIsLoading } = useContext(MainContext)
     const [inputSearch, setInputSearch] = useState("")
+    const [result, setResult] = useState("")
     useEffect(() => {
         initialPhotos();
     }, [])
@@ -28,21 +30,19 @@ const Main = () => {
                 text: data.alt_description
             })
         })
-        console.log(listData)
         setlistCards(listData)
         setIsLoading(false)
     }
     const handleCreateCardYourseft = () => {
-        setInputSearch("")
-        searchPhotos()
     }
     const searchPhotos = async () => {
         try {
+            setResult(inputSearch)
+            setInputSearch("")
             setIsLoading(true)
             const res = await searchPhotosAPI(inputSearch)
             setlistCards([])
             const data = res.data.results
-            console.log(data)
             let listData = []
             data.forEach((data) => {
                 listData.push({
@@ -56,7 +56,7 @@ const Main = () => {
                     text: data.alt_description
                 })
             })
-            console.log(listData)
+                (listData)
             setlistCards(listData)
             setIsLoading(false)
         }
@@ -69,7 +69,7 @@ const Main = () => {
     return (
         <>
 
-            <Flex style={{ padding: "20px 5vw 20px 5vw" }} vertical>
+            <Flex style={{ padding: "20px 5vw 20px 5vw" }} vertical gap="15px">
                 <Flex justify={"space-between"} gap="10vw">
                     <Search placeholder="Search photos and Illustrations " onSearch={searchPhotos} value={inputSearch}
                         onChange={(e) => setInputSearch(e.target.value)}
@@ -83,12 +83,15 @@ const Main = () => {
                         </Col>
                     </Row>
                 </Flex>
+                {result && <Text strong style={{
+                    fontSize: "20px",
+                    textTransform: "capitalize"
+                }}>{result}</Text>}
                 <div style={{
                     columns: "4 300px",
                     height: "auto",
                     margin: "0 auto",
                     breakInside: "avoid",
-                    paddingTop: "20px"
                 }}>
                     {
                         listCards.map((post, index) => {

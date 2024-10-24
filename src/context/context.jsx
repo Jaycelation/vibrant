@@ -12,6 +12,7 @@ export const ContextWrapper = (props) => {
     const [isLoading, setIsLoading] = useState(true)
     const [isLoginModelOpen, setIsLoginModalOpen] = useState(false);
     const [colorPrimary, setColorPrimary] = useState("#ffa500");
+    const [colorPrimary2, setColorPrimary2] = useState("#731fb4");
     const [colorSuccess, setColorSuccess] = useState("#52c41a");
     const [colorWarning, setColorWarning] = useState("#faad14");
     const [colorError, setColorError] = useState("#ff4d4f");
@@ -42,7 +43,9 @@ export const ContextWrapper = (props) => {
             colorBgBase, setBgBase,
             colorTextGray, setColorTextGray,
             isLoginModelOpen, setIsLoginModalOpen,
-            isLoading, setIsLoading
+            isLoading, setIsLoading,
+            colorPrimary2, setColorPrimary2
+
         }}>
             {props.children}
         </MainContext.Provider>

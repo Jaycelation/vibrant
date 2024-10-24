@@ -3,14 +3,44 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Main from './layout/Main';
+import SignUp from './pages/SignUp';
+import Header from './layout/Header';
+import Footer from './layout/Footer';
 import {
   ContextWrapper
 } from './context/context';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <>
+          <Header></Header>
+          <Main />
+          <Footer></Footer>
+        </>
+      },
+      {
+        path: "/signup",
+        element: <SignUp />
+      }
+    ]
+  },
+
+]);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ContextWrapper>
     <React.StrictMode>
-      <App />
+
+      <RouterProvider router={router} />
     </React.StrictMode>
   </ContextWrapper>
 

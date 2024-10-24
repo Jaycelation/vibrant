@@ -1,6 +1,6 @@
 import Header from './layout/Header';
 import Footer from './layout/Footer';
-import Main from './layout/Main';
+import { Outlet } from 'react-router-dom'
 import { useContext, useEffect } from 'react';
 import { MainContext } from './context/context';
 import { ConfigProvider } from 'antd';
@@ -12,10 +12,12 @@ const App = () => {
     colorLink, setColorLink,
     colorTextBase, setTextBase,
     colorBgBase, setBgBase,
+    setColorPrimary2
   } = useContext(MainContext);
   useEffect(() => {
     if (theme === "dark") {
       setColorPrimary("#731fb4")
+      setColorPrimary2("#ffa500")
       setColorSuccess("#52c41a")
       setColorWarning("#faad14")
       setColorError("#ff4d4f")
@@ -25,6 +27,7 @@ const App = () => {
     }
     else {
       setColorPrimary("#ffa500")
+      setColorPrimary2("#731fb4")
       setColorSuccess("#52c41a")
       setColorWarning("#faad14")
       setColorError("#ff4d4f")
@@ -69,14 +72,13 @@ const App = () => {
             paddingBlock: 10,
             colorBgElevated: colorPrimary,
             controlItemBgHover: "none",
-          }
+          },
+
         },
       }}
     >
       <>
-        <Header style={{ backgroundColor: colorPrimary }}></Header>
-        <Main></Main>
-        <Footer></Footer>
+        <Outlet />
       </>
 
     </ConfigProvider >
