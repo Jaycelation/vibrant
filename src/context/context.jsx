@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from 'react';
 export const MainContext = createContext(
     {
         name: "",
-        password: ""
+        email: ""
     }
 );
 
@@ -23,13 +23,14 @@ export const ContextWrapper = (props) => {
     const [user, setUser] = useState(
         {
             name: "",
-            password: ""
+            email: ""
         }
     )
     useEffect(() => {
         const themeLocal = localStorage.getItem("theme");
         setTheme(themeLocal)
     }, [])
+
     return (
         <MainContext.Provider value={{
             theme, setTheme,

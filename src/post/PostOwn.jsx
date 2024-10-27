@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Avatar, Flex, Typography } from "antd";
 import PostDetail from "./PostDetail";
+import { EyeOutlined, HeartOutlined, MessageOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const Post = (props) => {
@@ -11,11 +12,14 @@ const Post = (props) => {
     }
     return (
         <>
-            <Flex
+            <div
                 gap="5px"
                 wrap="nowrap"
                 vertical
-                style={{ breakInside: "avoid", cursor: "pointer", marginBottom: "40px" }}
+                style={{
+                    cursor: "pointer", marginBottom: "40px",
+                    position: "relative"
+                }}
                 onClick={() => handleViewPost()}
                 onMouseOver={() => { }}
             >
@@ -24,12 +28,15 @@ const Post = (props) => {
                     borderRadius: "10px"
                 }}
                     src={post.urlPhoto} alt="img" />
-                <Text strong>{post.text}</Text>
-                <Flex align="center" gap="5px">
-                    <Avatar style={{ flexShrink: "0" }} src={post.profile_image}></Avatar>
-                    <Text className="title"> {post.username}</Text>
+                <Flex gap="10px" style={{ position: "absolute", bottom: "15px", left: "15px" }}>
+                    <HeartOutlined style={{ color: "white" }} />
+                    <Text style={{ color: "white" }}>{post.likes}</Text>
+                    <EyeOutlined style={{ color: "white" }} />
+                    <Text style={{ color: "white" }}>{post.views}</Text>
+                    <MessageOutlined style={{ color: "white" }} />
+                    <Text style={{ color: "white" }}>0</Text>
                 </Flex>
-            </Flex >
+            </div>
             <PostDetail
                 isViewPost={isViewPost}
                 setIsViewPost={setIsViewPost}

@@ -31,15 +31,16 @@ const Main = () => {
             })
         })
         setlistCards(listData)
-        setIsLoading(false)
     }
     const handleCreateCardYourseft = () => {
     }
     const searchPhotos = async () => {
+        if (inputSearch.trim() === "") return;
         try {
             setResult(inputSearch)
             setInputSearch("")
             setIsLoading(true)
+            setlistCards([])
             const res = await searchPhotosAPI(inputSearch)
             setlistCards([])
             const data = res.data.results
@@ -56,9 +57,8 @@ const Main = () => {
                     text: data.alt_description
                 })
             })
-                (listData)
             setlistCards(listData)
-            setIsLoading(false)
+
         }
         catch {
             setlistCards([])
@@ -96,7 +96,7 @@ const Main = () => {
                     {
                         listCards.map((post, index) => {
                             return (<>
-                                <Post post={post} key={index} />
+                                <Post post={post} key={index * index} />
                             </>)
                         })
                     }

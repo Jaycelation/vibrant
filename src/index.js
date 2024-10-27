@@ -14,6 +14,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import User from './pages/User';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,11 +32,20 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp />
+      },
+      {
+        path: "/user",
+        element: <>
+          <Header></Header>
+          <User />
+          <Footer></Footer>
+        </>
       }
     ]
   },
 
 ]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ContextWrapper>

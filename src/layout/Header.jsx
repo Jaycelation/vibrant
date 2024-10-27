@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { MainContext } from '../context/context';
 import Login from '../pages/Login';
 import { message, Popconfirm, Typography } from 'antd';
+import { auth, signOut, } from '../firebase.config';
 const { Text } = Typography;
 
 const Header = () => {
@@ -12,7 +13,6 @@ const Header = () => {
         colorPrimary, colorTextBase,
         isLoginModelOpen,
         setIsLoginModalOpen } = useContext(MainContext);
-
     const handleSwitchTheme = (checked) => {
         if (!checked) {
             localStorage.setItem("theme", "dark")
@@ -27,10 +27,16 @@ const Header = () => {
         setIsLoginModalOpen(true)
     }
     const handleLogOut = () => {
-        setUser({
-            name: "",
-            password: ""
-        })
+        signOut(auth)
+            .then(() => {
+                setUser({
+                    name: "",
+                    password: ""
+                })
+            })
+            .catch((error) => {
+                console.log(error.message)
+            })
     }
     const confirmLogOut = (e) => {
         handleLogOut()
@@ -49,7 +55,7 @@ const Header = () => {
                 level={4} align='center'>Vibrant</Text>
             <Flex gap="middle" justify='space-around' align='center'>
                 {
-                    user.name === "" && user.password === ""
+                    user.name === "" && user.email === ""
                         ?
                         <UserOutlined
                             style={{ color: colorTextBase }}

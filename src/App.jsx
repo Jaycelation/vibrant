@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import { useContext, useEffect } from 'react';
 import { MainContext } from './context/context';
 import { ConfigProvider } from 'antd';
+
 const App = () => {
   const { theme, colorPrimary, setColorPrimary,
     colorSuccess, setColorSuccess,
@@ -35,7 +36,6 @@ const App = () => {
       setTextBase("#000000")
       setBgBase("#ffffff")
     }
-
   }, [theme])
   document.body.style.backgroundColor = colorBgBase;
   return (
@@ -73,7 +73,9 @@ const App = () => {
             colorBgElevated: colorPrimary,
             controlItemBgHover: "none",
           },
-
+          Divider: {
+            colorSplit: colorPrimary,
+          }
         },
       }}
     >
