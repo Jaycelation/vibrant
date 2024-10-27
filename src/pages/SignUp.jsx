@@ -7,7 +7,7 @@ import {
     , isConfirmed, minChar
 } from '../validation';
 import {
-    getDocs, addDoc, colRef,
+    getDocs, addDoc, colRefUser,
     createUserWithEmailAndPassword, auth, signInWithEmailAndPassword,
     query, where
 } from '../firebase.config';
@@ -45,7 +45,7 @@ const SignUp = () => {
             }
         }
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRef, where("name", "==", name))
+            const docRef = query(colRefUser, where("name", "==", name))
             const snapshot = await getDocs(docRef)
             if (snapshot.docs.length > 0) {
                 setErrorNameMessage('User name already exists');
@@ -54,17 +54,21 @@ const SignUp = () => {
             createUserWithEmailAndPassword(auth, email, password)
                 .then((cred) => {
                     cred.user.displayName = name;
-                    addDoc(colRef, {
+                    addDoc(colRefUser, {
                         name: cred.user.displayName,
                         email: cred.user.email
                     })
+                    setUser({
+                        name: name,
+                        email: cred.user.email,
+                        accessToken: cred.user.accessToken
+                    });
                     console.log(cred)
                 })
                 .catch((err) => {
                     console.log(err.message)
                 })
             navigate("/")
-
             return;
         }
         console.log("error");
@@ -76,7 +80,7 @@ const SignUp = () => {
         setErrorPasswordMessage(passwordError);
 
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRef, where("name", "==", name))
+            const docRef = query(colRefUser, where("name", "==", name))
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
@@ -86,7 +90,8 @@ const SignUp = () => {
                         console.log(cred.user)
                         setUser({
                             name: name,
-                            email: cred.user.email
+                            email: cred.user.email,
+                            accessToken: cred.user.accessToken
                         });
                         setName("");
                         setPassword("");

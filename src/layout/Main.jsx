@@ -21,7 +21,7 @@ const Main = () => {
         data.forEach((data) => {
             listData.push({
                 id: data.id,
-                createAt: data.createAt,
+                createdAt: data.createdAt,
                 likes: data.likes,
                 views: data.views,
                 username: data.user.name,
@@ -48,7 +48,7 @@ const Main = () => {
             data.forEach((data) => {
                 listData.push({
                     id: data.id,
-                    createAt: data.createAt,
+                    createdAt: data.createdAt,
                     likes: data.likes,
                     views: data.views,
                     username: data.user.name,

@@ -3,7 +3,8 @@ import { createContext, useState, useEffect } from 'react';
 export const MainContext = createContext(
     {
         name: "",
-        email: ""
+        email: "",
+        accessToken: ""
     }
 );
 
@@ -23,7 +24,8 @@ export const ContextWrapper = (props) => {
     const [user, setUser] = useState(
         {
             name: "",
-            email: ""
+            email: "",
+            accessToken: ""
         }
     )
     useEffect(() => {

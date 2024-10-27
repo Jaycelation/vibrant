@@ -5,9 +5,11 @@ import { MainContext } from '../context/context';
 import Login from '../pages/Login';
 import { message, Popconfirm, Typography } from 'antd';
 import { auth, signOut, } from '../firebase.config';
+import { useNavigate } from 'react-router-dom';
 const { Text } = Typography;
 
 const Header = () => {
+    const navigate = useNavigate();
     const { user, setUser,
         setTheme,
         colorPrimary, colorTextBase,
@@ -31,7 +33,8 @@ const Header = () => {
             .then(() => {
                 setUser({
                     name: "",
-                    password: ""
+                    email: "",
+                    accessToken: ""
                 })
             })
             .catch((error) => {
@@ -55,15 +58,20 @@ const Header = () => {
                 level={4} align='center'>Vibrant</Text>
             <Flex gap="middle" justify='space-around' align='center'>
                 {
-                    user.name === "" && user.email === ""
+                    user.accessToken === ""
                         ?
                         <UserOutlined
                             style={{ color: colorTextBase }}
                             onClick={() => handleOpenLoginModel()}
                         />
                         :
-                        <Flex direction="vertical" align='center' gap={20}>
-                            <Flex direction="vertical" align='center' gap={5}>
+                        <Flex direction="vertical" align='center' gap={20}
+
+                            style={{ cursor: "pointer" }}
+                        >
+                            <Flex direction="vertical" align='center' gap={5}
+                                onClick={() => { navigate("/user") }}
+                            >
                                 <span style={{ fontSize: "14px" }}>Welcome {user.name}</span>
                                 <Avatar size="small" icon={<UserOutlined />} />
                             </Flex>
@@ -80,7 +88,9 @@ const Header = () => {
                         </Flex>
                 }
 
-                <HomeOutlined style={{ color: colorTextBase }} />
+                <HomeOutlined style={{ color: colorTextBase }}
+                    onClick={() => { navigate("/") }}
+                />
                 <SettingOutlined style={{ color: colorTextBase }} />
                 <Switch
                     unCheckedChildren={<MoonOutlined style={{ color: colorTextBase }} />}

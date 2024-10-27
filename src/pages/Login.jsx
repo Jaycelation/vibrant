@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { validate, isRequired } from '../validation';
 import { useNavigate } from 'react-router-dom';
 import {
-    colRef, auth, getDocs,
+    colRefUser, auth, getDocs,
     query, where,
     signInWithEmailAndPassword
 } from '../firebase.config';
@@ -27,7 +27,7 @@ const Login = (props) => {
         setErrorPasswordMessage(passwordError);
 
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRef, where("name", "==", name))
+            const docRef = query(colRefUser, where("name", "==", name))
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
@@ -37,7 +37,8 @@ const Login = (props) => {
                         console.log(cred.user)
                         setUser({
                             name: name,
-                            email: cred.user.email
+                            email: cred.user.email,
+                            accessToken: cred.user.accessToken
                         });
                         resetForm()
                         setIsLoginModalOpen(false);

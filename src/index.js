@@ -50,7 +50,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ContextWrapper>
     <React.StrictMode>
-
       <RouterProvider router={router} />
     </React.StrictMode>
   </ContextWrapper>

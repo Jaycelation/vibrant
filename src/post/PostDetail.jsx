@@ -1,21 +1,61 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button, Modal, notification, Row, Col, Avatar, Input, Space, Flex, Typography } from 'antd';
 import { HeartOutlined, DownloadOutlined, AimOutlined } from '@ant-design/icons';
 import Comment from './Comment.jsx';
 import { MainContext } from '../context/context.jsx';
-import Login from '../pages/Login.jsx';
+import {
+    colRefComment,
+    getDocs, addDoc,
+    query, where, orderBy,
+    serverTimestamp, onSnapshot
+} from '../firebase.config.jsx'
 const { Text } = Typography;
 const PostDetail = (props) => {
     const { isViewPost, setIsViewPost, post } = props
     const { setIsLoginModalOpen, user } = useContext(MainContext)
+    const [isSendingMessage, setIsSendingMessage] = useState(false)
     const [inputComment, setInputComment] = useState("")
     const [listComment, setListComment] = useState([])
-    const [time, setTime] = useState("")
-    const handleSendComment = () => {
-        if (user.name && user.password) {
-            setTime(new Date().toLocaleTimeString())
-            setListComment([...listComment, inputComment])
+    useEffect(() => {
+        loadComment()
+        onSnapshot(colRefComment, () => {
+            loadComment()
+        })
+    }, [])
+
+    const loadComment = async () => {
+        setListComment([])
+        const q = query(colRefComment, where("post_id", "==", post.id), orderBy('createdAt', 'desc'))
+        const snapshot = await getDocs(q)
+        let list = []
+        snapshot.docs.forEach((doc) => {
+            const data = doc.data()
+            console.log("check load", doc)
+            list.push({
+                post_id: data.post_id,
+                createdAt: data.createdAt,
+                content: data.content,
+                accessToken: data.accessToken,
+                username: data.username
+            })
+            setListComment(list)
             setInputComment("")
+            setIsSendingMessage(false)
+        })
+    }
+    const handleSendComment = () => {
+        if (inputComment.trim() === "") return;
+        if (user.accessToken) {
+            setIsSendingMessage(true)
+            addDoc(colRefComment, {
+                post_id: post.id,
+                createdAt: serverTimestamp(),
+                content: inputComment,
+                accessToken: user.accessToken,
+                username: user.name
+            })
+            loadComment()
+
         }
         else {
             notification.warning({
@@ -30,8 +70,8 @@ const PostDetail = (props) => {
                                 setIsViewPost(false)
                             }}
                             style={{ cursor: "pointer" }}
-                        >Sign in </Text> to unlock this feature</Text>
-                    <Login />
+                        >Sign in </Text> to unlock this feature
+                    </Text>
                 </>
                 ,
             });
@@ -73,9 +113,10 @@ const PostDetail = (props) => {
                     <Flex style={{ flexGrow: "1", position: "relative", minHeight: "300px", marginTop: "20px", marginBottom: "20px" }}>
                         <Flex gap="20px" vertical style={{ width: "100%", height: "100%", position: "absolute", overflowY: "scroll" }}>
                             {
-                                listComment.map((text, index) => {
+                                listComment.map((comment, index) => {
+                                    console.log(comment)
                                     return (
-                                        <Comment key={index} text={text} time={time} />
+                                        <Comment key={index} comment={comment} />
                                     )
                                 })
                             }
@@ -92,6 +133,7 @@ const PostDetail = (props) => {
                         />
                         <Button type="primary"
                             onClick={handleSendComment}
+                            loading={isSendingMessage}
                         >Send</Button>
                     </Space.Compact>
                 </Col>

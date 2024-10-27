@@ -6,7 +6,7 @@ const { Text } = Typography;
 const User = () => {
     const post = {
         id: "123",
-        createAt: "0",
+        createdAt: "0",
         likes: "0",
         views: "0",
         username: "nav",
