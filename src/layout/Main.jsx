@@ -44,9 +44,9 @@ const Main = () => {
             const res = await searchPhotosAPI(inputSearch)
             setlistCards([])
             const data = res.data.results
-            let listData = []
+            let listDataCards = []
             data.forEach((data) => {
-                listData.push({
+                listDataCards.push({
                     id: data.id,
                     createdAt: data.createdAt,
                     likes: data.likes,
@@ -57,7 +57,7 @@ const Main = () => {
                     text: data.alt_description
                 })
             })
-            setlistCards(listData)
+            setlistCards(listDataCards)
 
         }
         catch {
@@ -96,7 +96,7 @@ const Main = () => {
                     {
                         listCards.map((post, index) => {
                             return (<>
-                                <Post post={post} key={index * index} />
+                                <Post post={post} key={post.id} />
                             </>)
                         })
                     }

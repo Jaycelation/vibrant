@@ -23,7 +23,7 @@ const Post = (props) => {
                     width: "100%",
                     borderRadius: "10px"
                 }}
-                    src={post.urlPhoto} alt="img" />
+                    src={post.urlPhoto} alt="img" loading="lazy" />
                 <Text strong>{post.text}</Text>
                 <Flex align="center" gap="5px">
                     <Avatar style={{ flexShrink: "0" }} src={post.profile_image}></Avatar>

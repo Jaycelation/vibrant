@@ -32,10 +32,20 @@ const Header = () => {
         signOut(auth)
             .then(() => {
                 setUser({
+                    id: "",
                     name: "",
                     email: "",
                     accessToken: ""
                 })
+                localStorage.setItem('user', JSON.stringify(
+                    {
+                        id: "",
+                        name: "",
+                        email: "",
+                        accessToken: ""
+                    }
+                ))
+                navigate("/")
             })
             .catch((error) => {
                 console.log(error.message)

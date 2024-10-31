@@ -1,29 +1,43 @@
-import { SmileOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider, Flex, Typography } from "antd";
-import PostOwn from "../post/PostOwn";
+import PersonalPost from "../post/PersonalPost";
+import { useState, useContext, useEffect } from "react";
+import CreateNewPost from "../post/CreateNewPost";
+import { onSnapshot, colRefPost, query, where, orderBy, getDocs } from '../firebase.config'
+import { MainContext } from "../context/context";
 const { Text } = Typography;
 
 const User = () => {
-    const post = {
-        id: "123",
-        createdAt: "0",
-        likes: "0",
-        views: "0",
-        username: "nav",
-        profile_image: null,
-        urlPhoto: "https://images.unsplash.com/photo-1541275055241-329bbdf9a191?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dmlvbGV0fGVufDB8fDB8fHww",
-        text: "hello boi"
+    const { listPersonalPost, setListPersonalPost, user } = useContext(MainContext)
+    const [isCreateNewPost, setIsCreateNewPost] = useState(false)
+    useEffect(() => {
+        onSnapshot(colRefPost, snapshot => {
+            loadPersonalPost()
+        })
+    }, [])
+    const loadPersonalPost = async () => {
+        setListPersonalPost([])
+        const q = query(colRefPost, where("username", "==", user.name), orderBy('createdAt', 'desc'))
+        const snapshot = await getDocs(q)
+        let list = []
+        snapshot.docs.forEach((doc) => {
+            list.push({ ...doc.data(), id: doc.id })
+        })
+        setListPersonalPost(list)
     }
     return (
         <Flex vertical justify="center" align="center" gap="5px" style={{ padding: "40px" }}>
             <Avatar size={96}></Avatar>
-            <Text style={{ fontWeight: "600", fontSize: "30px" }}>Username</Text>
-            <Text type="secondary" style={{ fontSize: "16px" }}> <SmileOutlined /> Email</Text>
+            <Text style={{ fontWeight: "600", fontSize: "30px" }}>{user.name}</Text>
+            <Text type="secondary" style={{ fontSize: "16px" }}> {user.email}</Text>
             <Flex style={{ paddingTop: "20px" }} gap="20px">
-                <Button>Create New</Button>
+                <Button type="primary"
+                    onClick={() => { setIsCreateNewPost(true) }}
+                ><a href="#create">{isCreateNewPost ? "Post" : "Create New"}</a></Button>
                 <Button> Edit profile</Button>
             </Flex>
             <Divider />
+
+
             <div
                 style={{
                     columns: "4 200px",
@@ -32,19 +46,17 @@ const User = () => {
                     breakInside: "avoid"
                 }}
             >
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
-                <PostOwn post={post} />
+                {listPersonalPost.map((post, index) => {
+                    console.log(post)
+                    return (
+                        <PersonalPost post={post} key={index} />
+                    )
+                })}
             </div>
+            <CreateNewPost
+                isCreateNewPost={isCreateNewPost}
+                setIsCreateNewPost={setIsCreateNewPost}
+            />
         </Flex>
     )
 }

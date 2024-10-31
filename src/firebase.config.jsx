@@ -10,6 +10,11 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword, signOut,
 } from 'firebase/auth'
+import {
+    getStorage, ref,
+    uploadBytes, getMetadata,
+    listAll, getDownloadURL
+} from "firebase/storage";
 const firebaseConfig = {
     apiKey: "AIzaSyA5dJXLtcBiUojJZzPfOnbauL_G0bMl83A",
     authDomain: "vibrant-4e40d.firebaseapp.com",
@@ -24,12 +29,17 @@ const db = getFirestore()
 const colRefUser = collection(db, 'users')
 const auth = getAuth();
 const colRefComment = collection(db, 'comment')
+const colRefPost = collection(db, 'posts')
+const storage = getStorage()
 
 export {
-    db, auth, colRefUser, colRefComment,
+    db, auth, colRefUser, colRefComment, colRefPost,
     getDocs, addDoc, deleteDoc, doc,
     query, where, orderBy,
     createUserWithEmailAndPassword, signOut,
     signInWithEmailAndPassword,
-    serverTimestamp, onSnapshot
+    serverTimestamp, onSnapshot,
+    storage, getStorage, ref,
+    uploadBytes, getMetadata,
+    listAll, getDownloadURL,
 }

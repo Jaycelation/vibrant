@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Avatar, Flex, Typography } from "antd";
+import { useContext, useState } from "react";
+import { Flex, Typography } from "antd";
 import PostDetail from "./PostDetail";
 import { EyeOutlined, HeartOutlined, MessageOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const Post = (props) => {
+
     const { post } = props;
     const [isViewPost, setIsViewPost] = useState(false);
     const handleViewPost = () => {

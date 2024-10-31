@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
-import { Modal, Input, Flex, Typography } from 'antd';
+import { Modal, Input, Flex, Typography, Spin, } from 'antd';
 import { MainContext } from '../context/context';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, LoadingOutlined } from '@ant-design/icons';
 import { validate, isRequired } from '../validation';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -12,7 +12,7 @@ import {
 const { Text } = Typography;
 const Login = (props) => {
     const { isLoginModelOpen, setIsLoginModalOpen } = props;
-    const { setUser } = useContext(MainContext);
+    const { setUser, isLoadingLogin, setIsLoadingLogin } = useContext(MainContext);
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorLogin, setErrorLogin] = useState("")
     const [name, setName] = useState("");
@@ -21,6 +21,7 @@ const Login = (props) => {
     const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
     const navigate = useNavigate();
     const handleSubmitLogin = async () => {
+        setIsLoadingLogin(true)
         const nameError = validate(name, [isRequired]);
         const passwordError = validate(password, [isRequired]);
         setErrorNameMessage(nameError);
@@ -31,15 +32,17 @@ const Login = (props) => {
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
-                console.log(emailSnapshot)
                 signInWithEmailAndPassword(auth, emailSnapshot, password)
                     .then((cred) => {
-                        console.log(cred.user)
-                        setUser({
+                        const dataUser = {
+                            id: cred.user.uid,
                             name: name,
                             email: cred.user.email,
                             accessToken: cred.user.accessToken
-                        });
+                        }
+                        setUser(dataUser);
+                        const stringUser = JSON.stringify(dataUser)
+                        localStorage.setItem('user', stringUser)
                         resetForm()
                         setIsLoginModalOpen(false);
                     })
@@ -51,6 +54,8 @@ const Login = (props) => {
                 setErrorLogin("Username is not valid")
             }
         }
+        setTimeout(() => { setIsLoadingLogin(false) }, 1000)
+
     };
     const handleCancel = () => {
         setIsLoginModalOpen(false);
@@ -71,6 +76,7 @@ const Login = (props) => {
                 onCancel={handleCancel}
                 okButtonProps={{}}
                 okText="Login"
+                style={{ position: "relative" }}
             >
                 <Flex vertical gap="15px" align="end" style={{ width: "100%", paddingTop: "20px" }}>
                     <Flex vertical gap="5px" style={{ width: "100%" }}>
@@ -102,6 +108,8 @@ const Login = (props) => {
                         navigate("/signup")
                     }}>Sign up</a>
                 </p>
+
+
             </Modal >
         </>
     );

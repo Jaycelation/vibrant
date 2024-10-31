@@ -1,4 +1,4 @@
-import { Flex, Typography, Input, Row, Col, Button, notification } from "antd";
+import { Flex, Typography, Input, Row, Col, Button } from "antd";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backgroundPhoto from "../assets/background.png";
@@ -63,7 +63,6 @@ const SignUp = () => {
                         email: cred.user.email,
                         accessToken: cred.user.accessToken
                     });
-                    console.log(cred)
                 })
                 .catch((err) => {
                     console.log(err.message)
@@ -84,7 +83,6 @@ const SignUp = () => {
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
-                console.log(emailSnapshot)
                 signInWithEmailAndPassword(auth, emailSnapshot, password)
                     .then((cred) => {
                         console.log(cred.user)

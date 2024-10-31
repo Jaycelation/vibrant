@@ -30,7 +30,6 @@ const PostDetail = (props) => {
         let list = []
         snapshot.docs.forEach((doc) => {
             const data = doc.data()
-            console.log("check load", doc)
             list.push({
                 post_id: data.post_id,
                 createdAt: data.createdAt,
@@ -38,10 +37,11 @@ const PostDetail = (props) => {
                 accessToken: data.accessToken,
                 username: data.username
             })
-            setListComment(list)
-            setInputComment("")
-            setIsSendingMessage(false)
+
         })
+        setListComment(list)
+        setInputComment("")
+        setIsSendingMessage(false)
     }
     const handleSendComment = () => {
         if (inputComment.trim() === "") return;
@@ -55,7 +55,6 @@ const PostDetail = (props) => {
                 username: user.name
             })
             loadComment()
-
         }
         else {
             notification.warning({
@@ -114,7 +113,6 @@ const PostDetail = (props) => {
                         <Flex gap="20px" vertical style={{ width: "100%", height: "100%", position: "absolute", overflowY: "scroll" }}>
                             {
                                 listComment.map((comment, index) => {
-                                    console.log(comment)
                                     return (
                                         <Comment key={index} comment={comment} />
                                     )

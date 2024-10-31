@@ -10,7 +10,8 @@ export const MainContext = createContext(
 
 export const ContextWrapper = (props) => {
     const [theme, setTheme] = useState();
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoadingSignUp, setIsLoadingSignUp] = useState(false)
+    const [isLoadingLogin, setIsLoadingLogin] = useState(false)
     const [isLoginModelOpen, setIsLoginModalOpen] = useState(false);
     const [colorPrimary, setColorPrimary] = useState("#ffa500");
     const [colorPrimary2, setColorPrimary2] = useState("#731fb4");
@@ -23,12 +24,16 @@ export const ContextWrapper = (props) => {
     const [colorTextGray, setColorTextGray] = useState("#919191");
     const [user, setUser] = useState(
         {
+            id: "",
             name: "",
             email: "",
             accessToken: ""
         }
     )
+    const [listPersonalPost, setListPersonalPost] = useState([])
     useEffect(() => {
+        const userLocal = JSON.parse(localStorage.getItem("user") || "{}")
+        setUser(userLocal)
         const themeLocal = localStorage.getItem("theme");
         setTheme(themeLocal)
     }, [])
@@ -46,9 +51,10 @@ export const ContextWrapper = (props) => {
             colorBgBase, setBgBase,
             colorTextGray, setColorTextGray,
             isLoginModelOpen, setIsLoginModalOpen,
-            isLoading, setIsLoading,
-            colorPrimary2, setColorPrimary2
-
+            colorPrimary2, setColorPrimary2,
+            listPersonalPost, setListPersonalPost,
+            isLoadingSignUp, setIsLoadingSignUp,
+            isLoadingLogin, setIsLoadingLogin
         }}>
             {props.children}
         </MainContext.Provider>

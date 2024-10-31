@@ -15,11 +15,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import User from './pages/User';
+import ErrorPage from './pages/Error';
+import PrivateRoute from './pages/Private.Router';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -35,11 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/user",
-        element: <>
+        element: <PrivateRoute>
           <Header></Header>
           <User />
           <Footer></Footer>
-        </>
+        </PrivateRoute>
       }
     ]
   },
