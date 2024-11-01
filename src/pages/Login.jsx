@@ -22,6 +22,7 @@ const Login = (props) => {
     const navigate = useNavigate();
     const handleSubmitLogin = async () => {
         setIsLoadingLogin(true)
+        // check input
         const nameError = validate(name, [isRequired]);
         const passwordError = validate(password, [isRequired]);
         setErrorNameMessage(nameError);
@@ -35,15 +36,16 @@ const Login = (props) => {
                 signInWithEmailAndPassword(auth, emailSnapshot, password)
                     .then((cred) => {
                         const dataUser = {
-                            id: cred.user.uid,
+                            id: snapshot.docs[0].id,
                             name: name,
                             email: cred.user.email,
-                            accessToken: cred.user.accessToken
+                            accessToken: cred.user.accessToken,
+                            friends: snapshot.docs[0].data().friends
                         }
                         setUser(dataUser);
-                        const stringUser = JSON.stringify(dataUser)
-                        localStorage.setItem('user', stringUser)
-                        resetForm()
+                        const stringUser = JSON.stringify(dataUser);
+                        localStorage.setItem('user', stringUser);
+                        resetForm();
                         setIsLoginModalOpen(false);
                     })
                     .catch(() => {

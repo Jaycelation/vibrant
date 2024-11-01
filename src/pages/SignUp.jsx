@@ -18,12 +18,14 @@ const SignUp = () => {
     const { setUser } = useContext(MainContext);
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(false);
-    const [errorLogin, setErrorLogin] = useState("")
+    const [errorLogin, setErrorLogin] = useState("");
+    const [errorSignUp, setErrorSignUp] = useState("");
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
     const [errorEmailMessage, setErrorEmailMessage] = useState("");
     const [errorNameMessage, setErrorNameMessage] = useState("");
     const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
@@ -53,24 +55,31 @@ const SignUp = () => {
             }
             createUserWithEmailAndPassword(auth, email, password)
                 .then((cred) => {
-                    cred.user.displayName = name;
+                    cred.user.displayName = name
                     addDoc(colRefUser, {
                         name: cred.user.displayName,
-                        email: cred.user.email
-                    })
-                    setUser({
-                        name: name,
                         email: cred.user.email,
-                        accessToken: cred.user.accessToken
-                    });
+                        friends: [],
+                    })
+                        .then((ref) => {
+                            const dataUser = {
+                                id: ref.id,
+                                name: name,
+                                email: cred.user.email,
+                                accessToken: cred.user.accessToken,
+                                friends: []
+                            }
+                            setUser(dataUser);
+                            const stringUser = JSON.stringify(dataUser)
+                            localStorage.setItem('user', stringUser)
+                            navigate("/")
+                        })
                 })
                 .catch((err) => {
-                    console.log(err.message)
+                    setErrorSignUp(err.message)
                 })
-            navigate("/")
             return;
         }
-        console.log("error");
     };
     const handleSubmitLogin = async () => {
         const nameError = validate(name, [isRequired]);
@@ -85,11 +94,12 @@ const SignUp = () => {
                 const emailSnapshot = snapshot.docs[0].data().email
                 signInWithEmailAndPassword(auth, emailSnapshot, password)
                     .then((cred) => {
-                        console.log(cred.user)
                         setUser({
+                            id: snapshot.docs[0].id,
                             name: name,
                             email: cred.user.email,
-                            accessToken: cred.user.accessToken
+                            accessToken: cred.user.accessToken,
+                            friends: snapshot.docs[0].data().friends
                         });
                         setName("");
                         setPassword("");
@@ -198,7 +208,7 @@ const SignUp = () => {
                         <Flex vertical gap="5px" align="flex-start" style={{ width: "100%" }}>
                             <Text>Confirm Password </Text>
                             <Input.Password size="large" status={errorConfirmPasswordMessage !== "" ? "error" : ""} placeholder="Confirm Password"
-                                visibilityToggle={{ visible: passwordVisible, onVisibleChange: setPasswordVisible }}
+                                visibilityToggle={{ visible: passwordConfirmVisible, onVisibleChange: setPasswordConfirmVisible }}
                                 value={confirmPassword} onChange={(e) => {
                                     setConfirmPassword(e.target.value)
                                     setErrorConfirmPasswordMessage("")
@@ -210,6 +220,11 @@ const SignUp = () => {
                         errorLogin &&
                         <Text type="danger" style={{ alignSelf: "flex-start" }}>
                             {errorLogin}</Text>
+                    }
+                    {
+                        errorSignUp &&
+                        <Text type="danger" style={{ alignSelf: "flex-start" }}>
+                            {errorSignUp}</Text>
                     }
                     {isLogin &&
                         <Text style={{ fontSize: "16px" }} >

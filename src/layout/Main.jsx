@@ -54,7 +54,9 @@ const Main = () => {
                     username: data.user.name,
                     profile_image: data.user.profile_image.small,
                     urlPhoto: data.urls.full,
-                    text: data.alt_description
+                    text: data.alt_description,
+                    imgName: "",
+                    status: "public",
                 })
             })
             setlistCards(listDataCards)

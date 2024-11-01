@@ -35,7 +35,8 @@ const PostDetail = (props) => {
                 createdAt: data.createdAt,
                 content: data.content,
                 accessToken: data.accessToken,
-                username: data.username
+                username: data.username,
+                reply: []
             })
 
         })
@@ -52,7 +53,8 @@ const PostDetail = (props) => {
                 createdAt: serverTimestamp(),
                 content: inputComment,
                 accessToken: user.accessToken,
-                username: user.name
+                username: user.name,
+                reply: []
             })
             loadComment()
         }

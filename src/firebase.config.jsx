@@ -3,7 +3,8 @@ import {
     getFirestore, collection,
     getDocs, addDoc, deleteDoc, doc,
     query, where, orderBy,
-    serverTimestamp, onSnapshot
+    serverTimestamp, onSnapshot,
+    updateDoc, arrayUnion
 } from 'firebase/firestore';
 import {
     getAuth,
@@ -33,8 +34,8 @@ const colRefPost = collection(db, 'posts')
 const storage = getStorage()
 
 export {
-    db, auth, colRefUser, colRefComment, colRefPost,
-    getDocs, addDoc, deleteDoc, doc,
+    db, auth, colRefUser, colRefComment, colRefPost, arrayUnion,
+    getDocs, addDoc, deleteDoc, doc, updateDoc,
     query, where, orderBy,
     createUserWithEmailAndPassword, signOut,
     signInWithEmailAndPassword,
@@ -42,4 +43,5 @@ export {
     storage, getStorage, ref,
     uploadBytes, getMetadata,
     listAll, getDownloadURL,
+
 }

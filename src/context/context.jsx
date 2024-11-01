@@ -27,13 +27,17 @@ export const ContextWrapper = (props) => {
             id: "",
             name: "",
             email: "",
-            accessToken: ""
+            accessToken: "",
+            friends: ""
         }
     )
     const [listPersonalPost, setListPersonalPost] = useState([])
     useEffect(() => {
-        const userLocal = JSON.parse(localStorage.getItem("user") || "{}")
-        setUser(userLocal)
+        const dataUser = localStorage.getItem("user")
+        if (dataUser) {
+            const userLocal = JSON.parse(localStorage.getItem("user"))
+            setUser(userLocal)
+        }
         const themeLocal = localStorage.getItem("theme");
         setTheme(themeLocal)
     }, [])
@@ -54,7 +58,7 @@ export const ContextWrapper = (props) => {
             colorPrimary2, setColorPrimary2,
             listPersonalPost, setListPersonalPost,
             isLoadingSignUp, setIsLoadingSignUp,
-            isLoadingLogin, setIsLoadingLogin
+            isLoadingLogin, setIsLoadingLogin,
         }}>
             {props.children}
         </MainContext.Provider>

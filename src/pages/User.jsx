@@ -1,14 +1,16 @@
-import { Avatar, Button, Divider, Flex, Typography } from "antd";
+import { Avatar, Button, Divider, Flex, Typography, Empty } from "antd";
 import PersonalPost from "../post/PersonalPost";
 import { useState, useContext, useEffect } from "react";
 import CreateNewPost from "../post/CreateNewPost";
 import { onSnapshot, colRefPost, query, where, orderBy, getDocs } from '../firebase.config'
 import { MainContext } from "../context/context";
+import AddNewFriend from "../friend/AddNewFriend";
 const { Text } = Typography;
 
 const User = () => {
     const { listPersonalPost, setListPersonalPost, user } = useContext(MainContext)
     const [isCreateNewPost, setIsCreateNewPost] = useState(false)
+    const [isAddNewFriend, setIsAddNewFriend] = useState(false)
     useEffect(() => {
         onSnapshot(colRefPost, snapshot => {
             loadPersonalPost()
@@ -32,30 +34,44 @@ const User = () => {
             <Flex style={{ paddingTop: "20px" }} gap="20px">
                 <Button type="primary"
                     onClick={() => { setIsCreateNewPost(true) }}
-                ><a href="#create">{isCreateNewPost ? "Post" : "Create New"}</a></Button>
+                >{isCreateNewPost ? "Post" : "Create New"}</Button>
+                <Button type="primary"
+                    onClick={() => { setIsAddNewFriend(true) }}
+                > Add Friend</Button>
                 <Button> Edit profile</Button>
             </Flex>
             <Divider />
 
+            {
+                listPersonalPost.length > 0
+                    ?
+                    <div
+                        style={{
+                            columns: "4 200px",
+                            height: "auto",
+                            margin: "0 auto",
+                            breakInside: "avoid"
+                        }}
+                    >
+                        {listPersonalPost.map((post, index) => {
+                            return (
+                                <PersonalPost post={post} key={index} />
+                            )
+                        })}
+                    </div>
+                    :
+                    <div>
+                        <Empty description={false} />
+                    </div>
+            }
 
-            <div
-                style={{
-                    columns: "4 200px",
-                    height: "auto",
-                    margin: "0 auto",
-                    breakInside: "avoid"
-                }}
-            >
-                {listPersonalPost.map((post, index) => {
-                    console.log(post)
-                    return (
-                        <PersonalPost post={post} key={index} />
-                    )
-                })}
-            </div>
             <CreateNewPost
                 isCreateNewPost={isCreateNewPost}
                 setIsCreateNewPost={setIsCreateNewPost}
+            />
+            <AddNewFriend
+                isAddNewFriend={isAddNewFriend}
+                setIsAddNewFriend={setIsAddNewFriend}
             />
         </Flex>
     )

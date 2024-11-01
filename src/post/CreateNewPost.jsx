@@ -25,7 +25,9 @@ const CreateNewPost = (props) => {
             username: user.name,
             profile_image: null,
             urlPhoto: url,
-            text: captionInput
+            text: captionInput,
+            imgName: imgFile.name,
+            status: "public",
         })
         setImgUrl("")
         setCaptionInput("")
