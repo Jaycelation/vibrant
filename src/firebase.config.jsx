@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
     getFirestore, collection,
     getDocs, addDoc, deleteDoc, doc,
-    query, where, orderBy,
+    query, where, orderBy, or,
     serverTimestamp, onSnapshot,
     updateDoc, arrayUnion
 } from 'firebase/firestore';
@@ -26,22 +26,24 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig)
-const db = getFirestore()
-const colRefUser = collection(db, 'users')
+const db = getFirestore();
 const auth = getAuth();
-const colRefComment = collection(db, 'comment')
-const colRefPost = collection(db, 'posts')
-const storage = getStorage()
+const colRefUser = collection(db, 'users');
+const colRefComment = collection(db, 'comment');
+const colRefPost = collection(db, 'posts');
+const colRefBoxChat = collection(db, 'boxchats');
+const colRefMess = collection(db, 'messages');
+const storage = getStorage();
 
 export {
-    db, auth, colRefUser, colRefComment, colRefPost, arrayUnion,
+    db, auth, colRefUser, colRefComment,
+    colRefPost, arrayUnion, colRefBoxChat, colRefMess,
     getDocs, addDoc, deleteDoc, doc, updateDoc,
-    query, where, orderBy,
+    query, where, orderBy, or,
     createUserWithEmailAndPassword, signOut,
     signInWithEmailAndPassword,
     serverTimestamp, onSnapshot,
     storage, getStorage, ref,
     uploadBytes, getMetadata,
     listAll, getDownloadURL,
-
 }

@@ -4,12 +4,14 @@ import { useState, useEffect, useContext } from "react";
 import { fetchListPhotosAPI, searchPhotosAPI } from "../services/services.api";
 import { PlusOutlined } from "@ant-design/icons";
 import { MainContext } from "../context/context";
+import { useNavigate } from "react-router-dom";
 const { Text } = Typography;
 const { Search } = Input;
 const Main = () => {
     const [listCards, setlistCards] = useState([])
     const { setIsLoading } = useContext(MainContext)
     const [inputSearch, setInputSearch] = useState("")
+    const navigate = useNavigate()
     const [result, setResult] = useState("")
     useEffect(() => {
         initialPhotos();
@@ -23,7 +25,7 @@ const Main = () => {
                 id: data.id,
                 createdAt: data.createdAt,
                 likes: data.likes,
-                views: data.views,
+                views: 1999,
                 username: data.user.name,
                 profile_image: data.user.profile_image.small,
                 urlPhoto: data.urls.full,
@@ -33,16 +35,17 @@ const Main = () => {
         setlistCards(listData)
     }
     const handleCreateCardYourseft = () => {
+        navigate('/user')
     }
     const searchPhotos = async () => {
         if (inputSearch.trim() === "") return;
         try {
             setResult(inputSearch)
             setInputSearch("")
-            setIsLoading(true)
+            // setIsLoading(true)
             setlistCards([])
             const res = await searchPhotosAPI(inputSearch)
-            setlistCards([])
+            console.log(res)
             const data = res.data.results
             let listDataCards = []
             data.forEach((data) => {
@@ -62,7 +65,7 @@ const Main = () => {
             setlistCards(listDataCards)
 
         }
-        catch {
+        catch (e) {
             setlistCards([])
         }
 
@@ -71,8 +74,10 @@ const Main = () => {
     return (
         <>
 
-            <Flex style={{ padding: "20px 5vw 20px 5vw" }} vertical gap="15px">
-                <Flex justify={"space-between"} gap="10vw">
+            <Flex style={{ padding: "20px 4vw 20px 4vw" }} vertical gap="15px">
+                <Flex justify={"space-between"} gap="10vw"
+                    style={{ padding: "0 10px 0 10px" }}
+                >
                     <Search placeholder="Search photos and Illustrations " onSearch={searchPhotos} value={inputSearch}
                         onChange={(e) => setInputSearch(e.target.value)}
                     />

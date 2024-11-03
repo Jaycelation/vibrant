@@ -32,6 +32,7 @@ export const ContextWrapper = (props) => {
         }
     )
     const [listPersonalPost, setListPersonalPost] = useState([])
+    const [listBoxChat, setListBoxChat] = useState([])
     useEffect(() => {
         const dataUser = localStorage.getItem("user")
         if (dataUser) {
@@ -41,7 +42,26 @@ export const ContextWrapper = (props) => {
         const themeLocal = localStorage.getItem("theme");
         setTheme(themeLocal)
     }, [])
-
+    const reset = () => {
+        setUser({
+            id: "",
+            name: "",
+            email: "",
+            accessToken: "",
+            friends: []
+        })
+        setListPersonalPost([])
+        setListBoxChat([])
+        localStorage.setItem('user', JSON.stringify(
+            {
+                id: "",
+                name: "",
+                email: "",
+                accessToken: "",
+                friends: [],
+            }
+        ))
+    }
     return (
         <MainContext.Provider value={{
             theme, setTheme,
@@ -59,6 +79,8 @@ export const ContextWrapper = (props) => {
             listPersonalPost, setListPersonalPost,
             isLoadingSignUp, setIsLoadingSignUp,
             isLoadingLogin, setIsLoadingLogin,
+            listBoxChat, setListBoxChat,
+            reset
         }}>
             {props.children}
         </MainContext.Provider>

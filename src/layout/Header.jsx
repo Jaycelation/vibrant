@@ -15,8 +15,9 @@ const { Text } = Typography;
 const Header = () => {
     const [open, setOpen] = useState(false);
     const [isViewListFriends, setIsViewListFriends] = useState(false)
+    const [isHover, setIsHover] = useState(false)
     const navigate = useNavigate();
-    const { user, setUser,
+    const { user, reset,
         setTheme,
         colorPrimary, colorTextBase,
         isLoginModelOpen,
@@ -37,29 +38,15 @@ const Header = () => {
     const handleLogOut = () => {
         signOut(auth)
             .then(() => {
-                setUser({
-                    id: "",
-                    name: "",
-                    email: "",
-                    accessToken: "",
-                    friends: []
-                })
-                localStorage.setItem('user', JSON.stringify(
-                    {
-                        id: "",
-                        name: "",
-                        email: "",
-                        accessToken: "",
-                        friends: [],
-                    }
-                ))
                 navigate("/")
+                reset()
+                setOpen(false);
+                message.success('Logout Success');
             })
             .catch((error) => {
                 console.log(error.message)
             })
-        setOpen(false);
-        message.success('Logout Success');
+
     }
     // const confirmLogOut = (e) => {
     //     handleLogOut()
@@ -72,7 +59,14 @@ const Header = () => {
     return (
 
         <Flex
-            style={{ padding: "0 20px 0 20px", height: "50px", backgroundColor: colorPrimary }} justify='space-between' align='center'
+            style={{
+                padding: "0 20px 0 20px", height: "50px",
+                backgroundColor: colorPrimary,
+                transition: "box-shadow 1s",
+                boxShadow: isHover ? "0 2px 5px rgba(0,0,0,0.3)" : "none"
+            }} justify='space-between' align='center'
+            onMouseOver={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
         >
             <Text style={{
                 fontFamily: "cursive",

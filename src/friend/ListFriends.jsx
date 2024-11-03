@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import { MainContext } from "../context/context"
 import {
     colRefUser, getDocs,
+    onSnapshot,
     query, where,
 } from '../firebase.config';
 import { Button, Drawer } from 'antd';
@@ -12,8 +13,10 @@ const ListFriends = (props) => {
     const { isViewListFriends, setIsViewListFriends } = props
     const [listFriends, setListFriends] = useState([])
     useEffect(() => {
-        loadDataFriend()
-    }, [user])
+        onSnapshot(colRefUser, snapshot => {
+            loadDataFriend()
+        })
+    }, [])
     const loadDataFriend = async () => {
         const q = query(colRefUser, where("name", "==", user.name))
         const snapshot = await getDocs(q)

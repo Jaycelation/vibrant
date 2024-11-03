@@ -7,7 +7,9 @@ import {
     colRefUser,
     where,
     getDocs,
-    db, arrayUnion
+    db, arrayUnion,
+    addDoc,
+    colRefBoxChat
 } from '../firebase.config'
 
 const { Text } = Typography;
@@ -20,6 +22,8 @@ const AddNewFriend = (props) => {
         loadDataFriend()
     }, [inputSearch])
     const handleAddFriend = async (friend) => {
+        setInputSearch("")
+        setListResult([])
         let listFriendCurrent = [...user.friends, {
             name: friend.name,
             id: friend.id
@@ -31,6 +35,7 @@ const AddNewFriend = (props) => {
             accessToken: user.accessToken,
             friends: listFriendCurrent,
         })
+        // add friend for user
         const userRef = doc(db, 'users', user.id)
         await updateDoc(userRef, {
             friends: arrayUnion({
@@ -38,6 +43,19 @@ const AddNewFriend = (props) => {
                 id: friend.id
             })
         });
+        // add friend for friend
+        const friendRef = doc(db, 'users', friend.id)
+        await updateDoc(friendRef, {
+            friends: arrayUnion({
+                name: user.name,
+                id: user.id
+            })
+        });
+        // create a box chat
+        addDoc(colRefBoxChat, {
+            members: [friend.id, user.id],
+        })
+
     }
     const loadDataFriend = async () => {
         setListResult([])
@@ -45,11 +63,12 @@ const AddNewFriend = (props) => {
         const querySnapshot = await getDocs(q);
         const list = [];
         querySnapshot.forEach((doc) => {
-            if (!user.friends.includes({ name: doc.name, id: doc.id }))
-                list.push({
-                    id: doc.id,
-                    name: doc.data().name
-                })
+            const data = {
+                id: doc.id,
+                name: doc.data().name
+            }
+            if (!user.friends.some(friend => friend.id === data.id))
+                list.push(data)
         });
         setListResult(list)
     }

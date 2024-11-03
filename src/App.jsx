@@ -4,6 +4,8 @@ import { Outlet } from 'react-router-dom'
 import { useContext, useEffect } from 'react';
 import { MainContext } from './context/context';
 import { ConfigProvider } from 'antd';
+import ListFriends from './friend/ListFriends';
+import ListBoxChat from './friend/ListBoxChat';
 
 const App = () => {
   const { theme, colorPrimary, setColorPrimary,
@@ -82,7 +84,7 @@ const App = () => {
       <>
         <Outlet />
       </>
-
+      <ListBoxChat />
     </ConfigProvider >
   );
 }
