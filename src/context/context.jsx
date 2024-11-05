@@ -21,7 +21,15 @@ export const ContextWrapper = (props) => {
     const [colorTextBase, setTextBase] = useState("#360081");
     const [colorBgBase, setBgBase] = useState("#ffffff");
     const [colorTextGray, setColorTextGray] = useState("#919191");
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+    const [user, setUser] = useState({
+        id: "",
+        username: "",
+        email: "",
+        accessToken: "",
+        friends: [],
+        avatarUrl: "",
+        tags: []
+    })
     const [friend, setFriend] = useState(JSON.parse(localStorage.getItem("friend")))
     const [listPersonalPost, setListPersonalPost] = useState([])
     const [listBoxChat, setListBoxChat] = useState([])
@@ -52,7 +60,6 @@ export const ContextWrapper = (props) => {
         })
         setListPersonalPost([])
         setListBoxChat([])
-        localStorage.removeItem('user')
     }
     return (
         <MainContext.Provider value={{
