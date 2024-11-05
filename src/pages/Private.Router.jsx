@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Link } from "react-router-dom";
-import { Button, Result } from 'antd';
+import { Button, Flex, Result } from 'antd';
 import { MainContext } from '../context/context';
 import Header from '../layout/Header';
 import Footer from '../layout/Footer';

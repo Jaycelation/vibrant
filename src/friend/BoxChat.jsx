@@ -1,5 +1,5 @@
 import { Avatar, Button, Flex, Input, Space, Typography } from "antd";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MainContext } from "../context/context";
 import { CloseCircleFilled, SendOutlined } from "@ant-design/icons";
 import Message from "./Message";
@@ -20,18 +20,18 @@ const BoxChat = ({ box }) => {
             refMes.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
         });
     }, []);
-
+    useLayoutEffect(() => {
+        refMes.current?.lastElementChild?.scrollIntoView()
+    })
     const handleSendMessage = () => {
         if (message.trim() === "") return;
-
         addDoc(colRefMess, {
             boxchat: box.id,
-            user: user.id,
+            user_id: user.id,
             text: message,
             createdAt: serverTimestamp()
         });
         setMessage("");
-        // refMes.current.scrollToBottom()
     };
 
     const loadMessage = async () => {
@@ -45,7 +45,6 @@ const BoxChat = ({ box }) => {
             setListMessage(list);
         }
         catch (e) {
-            console.log(e);
         }
     };
     return (
@@ -57,6 +56,7 @@ const BoxChat = ({ box }) => {
                 borderRadius: "10px",
                 padding: "10px",
                 border: `1px solid ${colorPrimary}`,
+                transition: "1s ease-in-out"
             }}
             gap="1vw"
             justify="left"
@@ -66,8 +66,16 @@ const BoxChat = ({ box }) => {
             <Flex justify="space-between" style={{ width: "100%", }}>
 
                 <Flex align="center" gap="10px">
-                    <Avatar></Avatar>
-                    <Typography.Text style={{ fontWeight: "600" }}>{box.name}</Typography.Text>
+                    {box.avatarUrl === ""
+                        ?
+                        <Avatar style={{
+                            verticalAlign: 'middle',
+                        }}>{box.username.slice(0, 1).toUpperCase()}</Avatar>
+                        :
+                        <Avatar src={box.avatarUrl}></Avatar>
+                    }
+
+                    <Typography.Text style={{ fontWeight: "600" }}>{box.username}</Typography.Text>
                 </Flex>
                 <CloseCircleFilled style={{
                     color: colorPrimary,
@@ -75,7 +83,7 @@ const BoxChat = ({ box }) => {
                 }}
                     onClick={() => {
                         let list = listBoxChat;
-                        list = list.filter(fr => fr.name !== box.name)
+                        list = list.filter(fr => fr.username !== box.username)
                         setListBoxChat([...list])
                     }}
                 />
@@ -113,7 +121,14 @@ const BoxChat = ({ box }) => {
                 <Input placeholder="Text your message"
                     style={{ border: `1px solid ${colorPrimary}`, }}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => {
+                        setMessage(e.target.value)
+                    }}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                            handleSendMessage()
+                        }
+                    }}
                 />
                 <Button type="primary"
                     onClick={() => { handleSendMessage() }}

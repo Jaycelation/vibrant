@@ -1,43 +1,47 @@
-import { useState, useEffect, useContext } from "react"
+import { useEffect, useContext } from "react"
 import { MainContext } from "../context/context"
 import {
     colRefUser, getDocs,
     onSnapshot,
     query, where,
 } from '../firebase.config';
-import { Button, Drawer } from 'antd';
+import { Drawer } from 'antd';
 import { Flex } from "antd";
 import CardFriend from "./CardFriend";
 const ListFriends = (props) => {
-    const { user } = useContext(MainContext)
+    const { user, listFriends, setListFriends } = useContext(MainContext)
     const { isViewListFriends, setIsViewListFriends } = props
-    const [listFriends, setListFriends] = useState([])
     useEffect(() => {
         onSnapshot(colRefUser, snapshot => {
             loadDataFriend()
         })
     }, [])
     const loadDataFriend = async () => {
-        const q = query(colRefUser, where("name", "==", user.name))
-        const snapshot = await getDocs(q)
-        console.log(snapshot.docs)
-        if (snapshot.docs.length > 0) {
-            let list = []
-            snapshot.docs[0].data().friends.forEach((friend, index) => {
-                list.push(
-                    {
-                        name: friend.name,
-                        id: friend.id
-                    }
-                )
-            })
-            setListFriends(list)
+        try {
+            const q = query(colRefUser, where("username", "==", user.username))
+            const snapshot = await getDocs(q)
+            if (snapshot.docs.length > 0) {
+                let list = []
+                snapshot.docs[0].data().friends.forEach(async (friend, index) => {
+                    const q2 = query(colRefUser, where("username", '==', friend.username))
+                    const snapshot2 = await getDocs(q2);
+                    const url = snapshot2.docs[0].data().avatarUrl;
+                    list.push(
+                        {
+                            username: friend.username,
+                            id: friend.id,
+                            avatarUrl: url
+                        }
+                    )
+                })
+                setListFriends(list)
+            }
         }
+        catch (e) { }
     }
     return (
         <Drawer title="List Friends" onClose={() => { setIsViewListFriends(false) }} open={isViewListFriends}>
             <Flex vertical
-                gap="30px"
             >
                 {
                     listFriends.map((friend, index) => {

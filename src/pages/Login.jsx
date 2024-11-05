@@ -15,7 +15,7 @@ const Login = (props) => {
     const { setUser, isLoadingLogin, setIsLoadingLogin } = useContext(MainContext);
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorLogin, setErrorLogin] = useState("")
-    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorNameMessage, setErrorNameMessage] = useState("");
     const [errorPasswordMessage, setErrorPasswordMessage] = useState("");
@@ -23,13 +23,13 @@ const Login = (props) => {
     const handleSubmitLogin = async () => {
         setIsLoadingLogin(true)
         // check input
-        const nameError = validate(name, [isRequired]);
+        const nameError = validate(username, [isRequired]);
         const passwordError = validate(password, [isRequired]);
         setErrorNameMessage(nameError);
         setErrorPasswordMessage(passwordError);
 
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRefUser, where("name", "==", name))
+            const docRef = query(colRefUser, where("username", "==", username))
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
@@ -37,10 +37,12 @@ const Login = (props) => {
                     .then((cred) => {
                         const dataUser = {
                             id: snapshot.docs[0].id,
-                            name: name,
+                            username: username,
                             email: cred.user.email,
                             accessToken: cred.user.accessToken,
-                            friends: snapshot.docs[0].data().friends
+                            friends: snapshot.docs[0].data().friends,
+                            avatarUrl: snapshot.docs[0].data().avatarUrl,
+                            tags: snapshot.docs[0].data().tags
                         }
                         setUser(dataUser);
                         const stringUser = JSON.stringify(dataUser);
@@ -64,7 +66,7 @@ const Login = (props) => {
         resetForm()
     };
     const resetForm = () => {
-        setName("");
+        setUsername("");
         setPassword("");
         setErrorNameMessage("");
         setErrorPasswordMessage("");
@@ -83,8 +85,8 @@ const Login = (props) => {
                 <Flex vertical gap="15px" align="end" style={{ width: "100%", paddingTop: "20px" }}>
                     <Flex vertical gap="5px" style={{ width: "100%" }}>
                         <Input status={errorNameMessage !== "" ? "error" : ""} placeholder="User Name" prefix={<UserOutlined />}
-                            value={name} onChange={(e) => {
-                                setName(e.target.value)
+                            value={username} onChange={(e) => {
+                                setUsername(e.target.value)
                                 setErrorNameMessage("")
                             }}
                         />

@@ -7,7 +7,7 @@ import { MainContext } from "../context/context";
 import { useNavigate } from "react-router-dom";
 const { Text } = Typography;
 const { Search } = Input;
-const Main = () => {
+const SearchPage = () => {
     const [listCards, setlistCards] = useState([])
     const { setIsLoading } = useContext(MainContext)
     const [inputSearch, setInputSearch] = useState("")
@@ -45,7 +45,6 @@ const Main = () => {
             // setIsLoading(true)
             setlistCards([])
             const res = await searchPhotosAPI(inputSearch)
-            console.log(res)
             const data = res.data.results
             let listDataCards = []
             data.forEach((data) => {
@@ -53,7 +52,7 @@ const Main = () => {
                     id: data.id,
                     createdAt: data.createdAt,
                     likes: data.likes,
-                    views: data.views,
+                    views: 1234,
                     username: data.user.name,
                     profile_image: data.user.profile_image.small,
                     urlPhoto: data.urls.full,
@@ -78,7 +77,7 @@ const Main = () => {
                 <Flex justify={"space-between"} gap="10vw"
                     style={{ padding: "0 10px 0 10px" }}
                 >
-                    <Search placeholder="Search photos and Illustrations " onSearch={searchPhotos} value={inputSearch}
+                    <Search placeholder="Search photos and Illustrations" onSearch={searchPhotos} value={inputSearch}
                         onChange={(e) => setInputSearch(e.target.value)}
                     />
                     <Row style={{ flexShrink: "0" }}>
@@ -96,10 +95,11 @@ const Main = () => {
                 }}>{result}</Text>}
                 <div style={{
                     columns: "4 300px",
-                    height: "auto",
+                    height: "100%",
                     margin: "0 auto",
-                    breakInside: "avoid",
-                }}>
+                    pageBreakInside: "avoid",
+                }}
+                >
                     {
                         listCards.map((post, index) => {
                             return (<>
@@ -117,4 +117,4 @@ const Main = () => {
     )
 }
 
-export default Main;
+export default SearchPage;

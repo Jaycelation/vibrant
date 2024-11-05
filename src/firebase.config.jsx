@@ -4,7 +4,7 @@ import {
     getDocs, addDoc, deleteDoc, doc,
     query, where, orderBy, or,
     serverTimestamp, onSnapshot,
-    updateDoc, arrayUnion
+    updateDoc, arrayUnion, getDoc, arrayRemove
 } from 'firebase/firestore';
 import {
     getAuth,
@@ -29,21 +29,23 @@ initializeApp(firebaseConfig)
 const db = getFirestore();
 const auth = getAuth();
 const colRefUser = collection(db, 'users');
-const colRefComment = collection(db, 'comment');
+const colRefComment = collection(db, 'comments');
 const colRefPost = collection(db, 'posts');
 const colRefBoxChat = collection(db, 'boxchats');
 const colRefMess = collection(db, 'messages');
+const colRefTag = collection(db, 'tags');
 const storage = getStorage();
 
 export {
     db, auth, colRefUser, colRefComment,
     colRefPost, arrayUnion, colRefBoxChat, colRefMess,
-    getDocs, addDoc, deleteDoc, doc, updateDoc,
+    getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc,
     query, where, orderBy, or,
     createUserWithEmailAndPassword, signOut,
     signInWithEmailAndPassword,
     serverTimestamp, onSnapshot,
     storage, getStorage, ref,
     uploadBytes, getMetadata,
-    listAll, getDownloadURL,
+    listAll, getDownloadURL, colRefTag,
+    arrayRemove
 }

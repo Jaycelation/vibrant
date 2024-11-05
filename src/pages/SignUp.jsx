@@ -21,7 +21,7 @@ const SignUp = () => {
     const [errorLogin, setErrorLogin] = useState("");
     const [errorSignUp, setErrorSignUp] = useState("");
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -32,7 +32,7 @@ const SignUp = () => {
     const [errorConfirmPasswordMessage, setErrorConfirmPasswordMessage] = useState("");
     let height = window.innerHeight;
     const handleSubmitSignUp = async () => {
-        const nameError = validate(name, [isRequired]);
+        const nameError = validate(username, [isRequired]);
         const passwordError = validate(password, [isRequired, minChar], { min: 6 });
         setErrorNameMessage(nameError);
         setErrorPasswordMessage(passwordError);
@@ -47,27 +47,31 @@ const SignUp = () => {
             }
         }
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRefUser, where("name", "==", name))
+            const docRef = query(colRefUser, where("username", "==", username))
             const snapshot = await getDocs(docRef)
             if (snapshot.docs.length > 0) {
-                setErrorNameMessage('User name already exists');
+                setErrorNameMessage('User username already exists');
                 return;
             }
             createUserWithEmailAndPassword(auth, email, password)
                 .then((cred) => {
-                    cred.user.displayName = name
+                    cred.user.displayName = username
                     addDoc(colRefUser, {
-                        name: cred.user.displayName,
+                        username: cred.user.displayName,
                         email: cred.user.email,
                         friends: [],
+                        tags: [],
+                        avatarUrl: "",
                     })
                         .then((ref) => {
                             const dataUser = {
                                 id: ref.id,
-                                name: name,
+                                username: username,
                                 email: cred.user.email,
                                 accessToken: cred.user.accessToken,
-                                friends: []
+                                friends: [],
+                                avatarUrl: "",
+                                tags: [],
                             }
                             setUser(dataUser);
                             const stringUser = JSON.stringify(dataUser)
@@ -82,13 +86,13 @@ const SignUp = () => {
         }
     };
     const handleSubmitLogin = async () => {
-        const nameError = validate(name, [isRequired]);
+        const nameError = validate(username, [isRequired]);
         const passwordError = validate(password, [isRequired]);
         setErrorNameMessage(nameError);
         setErrorPasswordMessage(passwordError);
 
         if (nameError === "" && passwordError === "") {
-            const docRef = query(colRefUser, where("name", "==", name))
+            const docRef = query(colRefUser, where("username", "==", username))
             const snapshot = await getDocs(docRef)
             if (snapshot && snapshot.docs && snapshot.docs.length > 0) {
                 const emailSnapshot = snapshot.docs[0].data().email
@@ -96,12 +100,14 @@ const SignUp = () => {
                     .then((cred) => {
                         setUser({
                             id: snapshot.docs[0].id,
-                            name: name,
+                            username: username,
                             email: cred.user.email,
                             accessToken: cred.user.accessToken,
-                            friends: snapshot.docs[0].data().friends
+                            friends: snapshot.docs[0].data().friends,
+                            avatarUrl: snapshot.docs[0].data().avatarUrl,
+                            tags: snapshot.docs[0].data().tags,
                         });
-                        setName("");
+                        setUsername("");
                         setPassword("");
                         setErrorNameMessage("");
                         setErrorPasswordMessage("");
@@ -117,7 +123,7 @@ const SignUp = () => {
         }
     };
     const resetForm = () => {
-        setName("");
+        setUsername("");
         setPassword("");
         setConfirmPassword("");
         setEmail("");
@@ -184,8 +190,8 @@ const SignUp = () => {
                     <Flex vertical gap="5px" align="flex-start" style={{ width: "100%" }} >
                         <Text>Username <Text type="secondary">(only letters, numbers)</Text></Text>
                         <Input size="large" status={errorNameMessage !== "" ? "error" : ""} placeholder="Username"
-                            value={name} onChange={(e) => {
-                                setName(e.target.value)
+                            value={username} onChange={(e) => {
+                                setUsername(e.target.value)
                                 setErrorNameMessage("")
                                 setErrorLogin("")
                             }}

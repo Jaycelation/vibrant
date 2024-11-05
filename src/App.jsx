@@ -11,11 +11,11 @@ const App = () => {
   const { theme, colorPrimary, setColorPrimary,
     colorSuccess, setColorSuccess,
     colorWarning, setColorWarning,
-    colorError, setColorError,
+    colorError, setColorError, colorPrimary2,
     colorLink, setColorLink,
     colorTextBase, setTextBase,
     colorBgBase, setBgBase,
-    setColorPrimary2
+    setColorPrimary2, isHiddenHeader, setIsHiddenHeader
   } = useContext(MainContext);
   useEffect(() => {
     if (theme === "dark") {
@@ -44,6 +44,7 @@ const App = () => {
     <ConfigProvider
       theme={{
         token: {
+          borderRadius: 10,
           colorPrimary: colorPrimary,
           colorSuccess: colorSuccess,
           colorWarning: colorWarning,
@@ -61,7 +62,8 @@ const App = () => {
             footerBg: colorBgBase,
           },
           Button: {
-            primaryShadow: "none"
+            primaryShadow: "none",
+
           },
           Switch: {
             colorPrimary: colorBgBase,
@@ -81,9 +83,14 @@ const App = () => {
         },
       }}
     >
-      <>
+      <div onWheel={(e) => {
+        if (e.deltaY > 0) { setIsHiddenHeader(true) }
+        else { setIsHiddenHeader(false) }
+      }}
+        style={{ "--bg-color-1": `${colorPrimary}`, "--bg-color-2": `${colorPrimary2}` }}
+      >
         <Outlet />
-      </>
+      </div>
       <ListBoxChat />
     </ConfigProvider >
   );

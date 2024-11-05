@@ -15,15 +15,15 @@ const CreateNewPost = (props) => {
     const [imgFile, setImgFile] = useState("")
     const [captionInput, setCaptionInput] = useState("")
     const handleCreateNewPost = async () => {
-        const storageRef = ref(storage, `${user.id}/${imgFile.name}`)
+        const storageRef = ref(storage, `${user.id}/posts/${imgFile.name}`)
         await uploadBytes(storageRef, imgFile)
         const url = await getDownloadURL(storageRef)
         addDoc(colRefPost, {
             createdAt: serverTimestamp(),
             likes: 0,
             views: 0,
-            username: user.name,
-            profile_image: null,
+            username: user.username,
+            profile_image: user.avatarUrl,
             urlPhoto: url,
             text: captionInput,
             imgName: imgFile.name,

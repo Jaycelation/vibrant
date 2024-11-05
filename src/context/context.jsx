@@ -1,15 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
-
 export const MainContext = createContext(
     {
-        name: "",
+        username: "",
         email: "",
         accessToken: ""
     }
 );
 
 export const ContextWrapper = (props) => {
-    const [theme, setTheme] = useState();
+    const [theme, setTheme] = useState(localStorage.getItem("theme"));
     const [isLoadingSignUp, setIsLoadingSignUp] = useState(false)
     const [isLoadingLogin, setIsLoadingLogin] = useState(false)
     const [isLoginModelOpen, setIsLoginModalOpen] = useState(false);
@@ -22,45 +21,38 @@ export const ContextWrapper = (props) => {
     const [colorTextBase, setTextBase] = useState("#360081");
     const [colorBgBase, setBgBase] = useState("#ffffff");
     const [colorTextGray, setColorTextGray] = useState("#919191");
-    const [user, setUser] = useState(
-        {
-            id: "",
-            name: "",
-            email: "",
-            accessToken: "",
-            friends: ""
-        }
-    )
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+    const [friend, setFriend] = useState(JSON.parse(localStorage.getItem("friend")))
     const [listPersonalPost, setListPersonalPost] = useState([])
     const [listBoxChat, setListBoxChat] = useState([])
+    const [isHiddenHeader, setIsHiddenHeader] = useState(false)
+    const [listFriends, setListFriends] = useState([])
+    const [isDisplayTags, setIsDisplayTags] = useState(false)
     useEffect(() => {
-        const dataUser = localStorage.getItem("user")
-        if (dataUser) {
-            const userLocal = JSON.parse(localStorage.getItem("user"))
-            setUser(userLocal)
-        }
-        const themeLocal = localStorage.getItem("theme");
-        setTheme(themeLocal)
-    }, [])
+        const dataUser = JSON.stringify(user)
+        localStorage.setItem('user', dataUser)
+    }, [user])
+
     const reset = () => {
         setUser({
             id: "",
-            name: "",
+            username: "",
             email: "",
             accessToken: "",
-            friends: []
+            friends: [],
+            avatarUrl: "",
+            tags: []
+        })
+        setFriend({
+            id: "",
+            username: "",
+            email: "",
+            avatarUrl: "",
+            tags: []
         })
         setListPersonalPost([])
         setListBoxChat([])
-        localStorage.setItem('user', JSON.stringify(
-            {
-                id: "",
-                name: "",
-                email: "",
-                accessToken: "",
-                friends: [],
-            }
-        ))
+        localStorage.removeItem('user')
     }
     return (
         <MainContext.Provider value={{
@@ -80,7 +72,10 @@ export const ContextWrapper = (props) => {
             isLoadingSignUp, setIsLoadingSignUp,
             isLoadingLogin, setIsLoadingLogin,
             listBoxChat, setListBoxChat,
-            reset
+            reset, isHiddenHeader, setIsHiddenHeader,
+            listFriends, setListFriends,
+            isDisplayTags, setIsDisplayTags,
+            friend, setFriend,
         }}>
             {props.children}
         </MainContext.Provider>

@@ -8,11 +8,11 @@ const Message = ({ message }) => {
     } = useContext(MainContext)
     return (
         <Flex
-            justify={message.user === user.id ? "right" : "left"}
+            justify={message.user_id === user.id ? "right" : "left"}
             align="center"
             style={{ paddingLeft: "10px" }}>
             <Typography.Text style={{
-                border: message.user === user.id ? `1px solid ${colorPrimary2}` : `1px solid ${colorPrimary}`,
+                border: message.user_id === user.id ? `1px solid ${colorPrimary2}` : `1px solid ${colorPrimary}`,
                 borderRadius: "20px",
                 padding: "5px",
                 paddingLeft: "10px",

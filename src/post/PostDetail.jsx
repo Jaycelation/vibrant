@@ -12,10 +12,11 @@ import {
 const { Text } = Typography;
 const PostDetail = (props) => {
     const { isViewPost, setIsViewPost, post } = props
-    const { setIsLoginModalOpen, user } = useContext(MainContext)
+    const { setIsLoginModalOpen, user, colorPrimary } = useContext(MainContext)
     const [isSendingMessage, setIsSendingMessage] = useState(false)
     const [inputComment, setInputComment] = useState("")
     const [listComment, setListComment] = useState([])
+    const [isViewMoreContent, setIsViewMoreContent] = useState(false)
     useEffect(() => {
         loadComment()
         onSnapshot(colRefComment, () => {
@@ -36,7 +37,8 @@ const PostDetail = (props) => {
                 content: data.content,
                 accessToken: data.accessToken,
                 username: data.username,
-                reply: []
+                reply: [],
+                avatarUrl: data.avatarUrl,
             })
 
         })
@@ -53,8 +55,9 @@ const PostDetail = (props) => {
                 createdAt: serverTimestamp(),
                 content: inputComment,
                 accessToken: user.accessToken,
-                username: user.name,
-                reply: []
+                username: user.username,
+                reply: [],
+                avatarUrl: user.avatarUrl
             })
             loadComment()
         }
@@ -83,23 +86,81 @@ const PostDetail = (props) => {
             height={"400px"}
             style={{ minWidth: "80%" }}
             open={isViewPost}
-            onCancel={() => setIsViewPost(false)}
+            onCancel={() => {
+                setIsViewPost(false)
+                setIsViewMoreContent(false)
+            }}
             footer={(_, { OkBtn, CancelBtn }) => (
                 <>
                 </>
             )}
         >
-            <Flex align='center' gap="10px">
-                <Avatar style={{ flexShrink: "0" }} src={post.profile_image}></Avatar>
-                <Text style={{
-                    fontSize: "20px",
-                    fontWeight: "600",
-                }}> {post.username} - {post.text}</Text>
-            </Flex>
             <Row justify='space-between' style={{ paddingTop: "20px" }} gutter={[24, 16]}>
-                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                    <img style={{ maxWidth: "100%", borderRadius: "10px" }}
-                        src={post.urlPhoto} alt="img" />
+                <Col xs={24} sm={24} md={24} lg={12} xl={12}
+                    style={{ position: "relative" }}
+                >
+                    <div style={{
+                        position: "relative",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignContent: "center",
+                    }}>
+                        <img style={{ maxWidth: "100%", borderRadius: "10px" }}
+                            src={post.urlPhoto} alt="img" />
+                        {
+                            isViewMoreContent &&
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    width: "100%",
+                                    borderRadius: "10px",
+                                    backgroundColor: "black",
+                                    opacity: "0.6",
+                                    height: "100%",
+                                    top: "0",
+                                    left: "0",
+                                    transition: 'ease-in-out 1s'
+                                }}>
+
+                            </div>
+                        }
+                    </div>
+                    <Flex align='start' gap="10px"
+
+                        style={{
+                            position: "absolute",
+                            top: "20px",
+                            left: "30px"
+                        }}
+                    >
+                        <Avatar size="large" src={post.profile_image}></Avatar>
+                        <div style={{
+                            backgroundColor: `${colorPrimary}80`,
+                            padding: "5px",
+                            maxWidth: "200px",
+                            cursor: "pointer",
+                            paddingRight: post.text.length > 20 ? "20px" : "15px",
+                            paddingLeft: post.text.length > 20 ? "20px" : "15px",
+                            borderRadius: isViewMoreContent && post.text.length > 20 ? "10px" : "1000px",
+                            display: post.text === "" ? "none" : "flex",
+                            justifyItems: "center",
+                            alignItems: "center",
+                            whiteSpace: isViewMoreContent && post.text.length > 20 ? "" : "nowrap",
+                            transition: "height 1s"
+                        }}
+                            onClick={() => setIsViewMoreContent(!isViewMoreContent)}
+                        > <span
+                            style={{
+                                maxWidth: "200px",
+                                display: "inline-block",
+                                fontSize: "20px",
+                                fontWeight: "500",
+                                color: "white",
+                                overflow: "hidden",
+                                textOverflow: isViewMoreContent && post.text.length > 20 ? "" : "ellipsis",
+                            }}
+                        >{post.text}</span></div>
+                    </Flex>
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={12} xl={12}
                     style={{ display: "flex", flexDirection: "column" }}>

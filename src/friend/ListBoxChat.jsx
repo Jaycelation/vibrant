@@ -1,10 +1,10 @@
 import { Flex } from "antd";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { MainContext } from "../context/context";
 import BoxChat from "./BoxChat";
 
 const ListBoxChat = () => {
-    const { listBoxChat, setListBoxChat } = useContext(MainContext)
+    const { listBoxChat } = useContext(MainContext)
     return (
         <Flex
             style={{

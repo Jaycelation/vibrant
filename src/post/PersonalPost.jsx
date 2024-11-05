@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
-import { Flex, Typography } from "antd";
+import { useState } from "react";
+import { Flex } from "antd";
 import PostDetail from "./PostDetail";
-import { EyeOutlined, HeartOutlined, MessageOutlined } from "@ant-design/icons";
+import { CommentOutlined, EyeFilled, HeartFilled } from "@ant-design/icons";
+import CountUp from "react-countup";
 
-const { Text } = Typography;
-const Post = (props) => {
+const PersonnalPost = (props) => {
     const { post } = props;
     const [isViewPost, setIsViewPost] = useState(false);
     const [isHover, setIsHover] = useState(false)
@@ -15,10 +15,12 @@ const Post = (props) => {
         <>
             <div
                 style={{
-                    cursor: "pointer", marginBottom: "40px",
+                    breakInside: "avoid",
+                    cursor: "pointer",
+                    marginBottom: "40px",
                     position: "relative",
                     borderRadius: "10px",
-                    height: "auto",
+                    height: "100%",
                     boxSizing: "border-box",
                     display: "flex",
                     justifyContent: "center",
@@ -31,19 +33,56 @@ const Post = (props) => {
                 onMouseOver={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}
             >
-                <img style={{
-                    width: "100%",
-                    borderRadius: "10px",
-                }}
-                    src={post.urlPhoto} alt="img" />
-                <Flex gap="10px" style={{ position: "absolute", bottom: "15px", left: "15px" }}>
-                    <HeartOutlined style={{ color: "white" }} />
-                    <Text style={{ color: "white" }}>{post.likes}</Text>
-                    <EyeOutlined style={{ color: "white" }} />
-                    <Text style={{ color: "white" }}>{post.views}</Text>
-                    <MessageOutlined style={{ color: "white" }} />
-                    <Text style={{ color: "white" }}>0</Text>
-                </Flex>
+
+                <div style={{
+                    position: "relative",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                }}>
+                    <img style={{
+                        width: "100%",
+                        borderRadius: "10px",
+                    }}
+                        src={post.urlPhoto} alt="img" loading="lazy" />
+                    {
+                        isHover &&
+                        <Flex
+                            justify="center" align="center"
+                            style={{
+                                position: "absolute",
+                                width: "100%",
+                                borderRadius: "10px",
+                                backgroundColor: "black",
+                                opacity: "0.6",
+                                height: "100%",
+                                top: "0",
+                                left: "0",
+                                transition: 'ease-in-out 1s'
+                            }}>
+                            <Flex vertical justify="center" align="center" gap="10px" >
+                                <Flex gap="10px" style={{ fontSize: "20px" }}>
+                                    <HeartFilled style={{ color: "red" }} />
+                                    <CountUp start={0} end={400} duration={1}
+                                        style={{ zIndex: "10000", color: "white" }}
+                                    />
+                                </Flex>
+                                <Flex gap="10px" style={{ fontSize: "20px" }}>
+                                    <EyeFilled style={{ color: "white" }} />
+                                    <CountUp start={0} end={1234} duration={1}
+                                        style={{ zIndex: "10000", color: "white" }}
+                                    />
+                                </Flex>
+                                <Flex gap="10px" style={{ fontSize: "20px" }}>
+                                    <CommentOutlined style={{ color: "white" }} />
+                                    <CountUp start={0} end={12} duration={1}
+                                        style={{ zIndex: "10000", color: "white" }}
+                                    />
+                                </Flex>
+                            </Flex>
+                        </Flex>
+                    }
+                </div>
             </div>
             <PostDetail
                 isViewPost={isViewPost}
@@ -56,4 +95,4 @@ const Post = (props) => {
     )
 }
 
-export default Post;
+export default PersonnalPost;

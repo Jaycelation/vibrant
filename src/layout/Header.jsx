@@ -1,5 +1,5 @@
-import { SunOutlined, MoonOutlined, SettingOutlined, UserOutlined, MessageOutlined, BellOutlined } from '@ant-design/icons';
-import { Avatar, Switch, Flex, Popover, Dropdown } from 'antd';
+import { SunOutlined, MoonOutlined, UserOutlined, MessageOutlined, BellOutlined, SearchOutlined, MenuOutlined, HomeOutlined } from '@ant-design/icons';
+import { Avatar, Switch, Flex, Popover } from 'antd';
 import { useContext, useState } from 'react';
 import { MainContext } from '../context/context';
 import Login from '../pages/Login';
@@ -10,7 +10,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import ListFriends from '../friend/ListFriends';
 
-const { Text } = Typography;
 
 const Header = () => {
     const [open, setOpen] = useState(false);
@@ -21,7 +20,9 @@ const Header = () => {
         setTheme,
         colorPrimary, colorTextBase,
         isLoginModelOpen,
-        setIsLoginModalOpen } = useContext(MainContext);
+        setIsLoginModalOpen,
+        isHiddenHeader,
+    } = useContext(MainContext);
     const handleSwitchTheme = (checked) => {
         if (!checked) {
             localStorage.setItem("theme", "dark")
@@ -44,10 +45,9 @@ const Header = () => {
                 message.success('Logout Success');
             })
             .catch((error) => {
-                console.log(error.message)
             })
-
     }
+
     // const confirmLogOut = (e) => {
     //     handleLogOut()
     //     message.success('Logout Success');
@@ -60,15 +60,21 @@ const Header = () => {
 
         <Flex
             style={{
-                padding: "0 20px 0 20px", height: "50px",
+                padding: "0 20px 0 20px",
+                height: isHiddenHeader ? "0" : "50px",
                 backgroundColor: colorPrimary,
-                transition: "box-shadow 1s",
-                boxShadow: isHover ? "0 2px 5px rgba(0,0,0,0.3)" : "none"
+                transition: "1s box-shadow,  300ms ease-in-out",
+                position: "sticky",
+                top: "0",
+                left: "0",
+                zIndex: "10",
+                overflow: "hidden",
+                boxShadow: isHover ? "0 2px 5px rgba(0,0,0,0.3)" : "none",
             }} justify='space-between' align='center'
             onMouseOver={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
         >
-            <Text style={{
+            <Typography.Text style={{
                 fontFamily: "cursive",
                 fontSize: "30px",
                 fontWeight: "600",
@@ -76,37 +82,11 @@ const Header = () => {
             }}
                 level={4} align='center'
                 onClick={() => { navigate("/") }}
-            >Vibrant</Text>
+            >Vibrant</Typography.Text>
             <Flex gap="middle" justify='space-around' align='center'>
-                {
-                    user.accessToken === ""
-                        ?
-                        <UserOutlined
-                            style={{ color: colorTextBase }}
-                            onClick={() => handleOpenLoginModel()}
-                        />
-                        :
-                        <Flex direction="vertical" align='center' gap={20}
-                            style={{ cursor: "pointer" }}
-                        >
-                            <Flex direction="vertical" align='center' gap={5}
-                                onClick={() => { navigate("/user") }}
-                            >
-                                <span style={{ fontSize: "14px" }}>Welcome {user.name}</span>
-                                <Avatar size="small" icon={<UserOutlined />} />
-                            </Flex>
-
-                            <MessageOutlined style={{ color: colorTextBase, position: "relative" }}
-                                onClick={() => { setIsViewListFriends(true) }}
-                            />
-
-                            <ListFriends setIsViewListFriends={setIsViewListFriends}
-                                isViewListFriends={isViewListFriends}
-                            />
-                            <BellOutlined style={{ color: colorTextBase }} />
-                        </Flex>
-                }
-
+                <SearchOutlined style={{ color: colorTextBase, cursor: "pointer" }}
+                    onClick={() => { navigate("/search") }}
+                />
                 <Popover
                     content={
                         // <Popconfirm
@@ -118,23 +98,65 @@ const Header = () => {
                         // >
                         user.accessToken === ""
                             ?
-                            <p
+                            <Typography.Text
                                 style={{ cursor: "pointer" }}
                                 onClick={() => { navigate('/signup') }}
-                            >Sign Up</p>
+                            >Sign Up</Typography.Text>
                             :
-                            <p
+                            <Typography.Text
                                 style={{ cursor: "pointer" }}
                                 onClick={handleLogOut}
-                            >Log Out</p>
+                            >Log Out</Typography.Text>
                         // </Popconfirm>
                     }
                     trigger="click"
                     open={open}
                     onOpenChange={handleOpenChange}
                 >
-                    <SettingOutlined style={{ color: colorTextBase }} />
+                    <MenuOutlined style={{ color: colorTextBase }} />
+
                 </Popover>
+
+                {
+                    user.accessToken === ""
+                        ?
+                        <>
+                            <UserOutlined
+                                style={{ color: colorTextBase }}
+                                onClick={() => handleOpenLoginModel()}
+                            />
+                        </>
+                        :
+                        <>
+                            <HomeOutlined style={{ color: colorTextBase }}
+                                onClick={() => { navigate('/homepage') }}
+                            />
+                            <MessageOutlined style={{ color: colorTextBase, position: "relative" }}
+                                onClick={() => { setIsViewListFriends(true) }}
+                            />
+
+                            <ListFriends setIsViewListFriends={setIsViewListFriends}
+                                isViewListFriends={isViewListFriends}
+                            />
+                            <BellOutlined style={{ color: colorTextBase, cursor: "pointer" }} />
+                            {
+                                user.avatarUrl === ""
+                                    ?
+                                    <Avatar size="small"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => { navigate('/user') }}
+                                    > {user.username.slice(0, 1).toUpperCase()}</Avatar>
+                                    :
+                                    <Avatar size="small"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => { navigate('/user') }}
+                                        src={user.avatarUrl}
+                                    > </Avatar>
+                            }
+
+
+                        </>
+                }
                 <Switch
                     unCheckedChildren={<MoonOutlined style={{ color: colorTextBase }} />}
                     checkedChildren={<SunOutlined style={{ color: colorTextBase }} />}

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Main from './layout/Main';
 import SignUp from './pages/SignUp';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
@@ -17,6 +16,10 @@ import {
 import User from './pages/User';
 import ErrorPage from './pages/Error';
 import PrivateRoute from './pages/Private.Router';
+import SearchPage from './pages/SearchPage';
+import Homepage from './pages/Homepage';
+import Friend from './pages/Friend';
+import Profile from './user/Profile';
 
 const router = createBrowserRouter([
   {
@@ -28,7 +31,15 @@ const router = createBrowserRouter([
         index: true,
         element: <>
           <Header></Header>
-          <Main />
+          <SearchPage />
+          <Footer></Footer>
+        </>
+      },
+      {
+        path: "/search",
+        element: <>
+          <Header></Header>
+          <SearchPage />
           <Footer></Footer>
         </>
       },
@@ -41,6 +52,22 @@ const router = createBrowserRouter([
         element: <PrivateRoute>
           <Header></Header>
           <User />
+          <Footer></Footer>
+        </PrivateRoute>
+      },
+      {
+        path: "/friend",
+        element: <PrivateRoute>
+          <Header></Header>
+          <Friend />
+          <Footer></Footer>
+        </PrivateRoute>
+      },
+      {
+        path: "/homepage",
+        element: <PrivateRoute>
+          <Header></Header>
+          <Homepage />
           <Footer></Footer>
         </PrivateRoute>
       }

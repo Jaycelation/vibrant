@@ -25,21 +25,23 @@ const AddNewFriend = (props) => {
         setInputSearch("")
         setListResult([])
         let listFriendCurrent = [...user.friends, {
-            name: friend.name,
+            username: friend.username,
             id: friend.id
         }];
         setUser({
             id: user.id,
-            name: user.name,
+            username: user.username,
             email: user.email,
             accessToken: user.accessToken,
             friends: listFriendCurrent,
+            avatarUrl: user.avatarUrl,
+            tags: user.tags,
         })
         // add friend for user
         const userRef = doc(db, 'users', user.id)
         await updateDoc(userRef, {
             friends: arrayUnion({
-                name: friend.name,
+                username: friend.username,
                 id: friend.id
             })
         });
@@ -47,7 +49,7 @@ const AddNewFriend = (props) => {
         const friendRef = doc(db, 'users', friend.id)
         await updateDoc(friendRef, {
             friends: arrayUnion({
-                name: user.name,
+                username: user.username,
                 id: user.id
             })
         });
@@ -59,13 +61,13 @@ const AddNewFriend = (props) => {
     }
     const loadDataFriend = async () => {
         setListResult([])
-        const q = query(colRefUser, where("name", "==", inputSearch), where("name", "!=", user.name))
+        const q = query(colRefUser, where("username", "==", inputSearch), where("username", "!=", user.username))
         const querySnapshot = await getDocs(q);
         const list = [];
         querySnapshot.forEach((doc) => {
             const data = {
                 id: doc.id,
-                name: doc.data().name
+                username: doc.data().username
             }
             if (!user.friends.some(friend => friend.id === data.id))
                 list.push(data)
@@ -98,8 +100,10 @@ const AddNewFriend = (props) => {
                         return (
                             <Flex justify='space-between' align='center'>
                                 <Flex gap="10px" align='center'>
-                                    <Avatar></Avatar>
-                                    <Text strong>{friend.name}</Text>
+                                    <Avatar style={{
+                                        verticalAlign: 'middle',
+                                    }}>{friend.username.slice(0, 1).toUpperCase()}</Avatar>
+                                    <Text strong>{friend.username}</Text>
                                 </Flex>
                                 <Button type="primary"
                                     onClick={() => {

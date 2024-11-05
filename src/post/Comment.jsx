@@ -12,7 +12,7 @@ const Comment = (props) => {
     }
     return (
         <Flex gap="10px">
-            <Avatar style={{ flexShrink: 0 }}></Avatar>
+            <Avatar style={{ flexShrink: 0, verticalAlign: 'middle' }}>{comment.username.slice(0, 1).toUpperCase()}</Avatar>
             <Flex vertical gap="3px" style={{ flexGrow: 1 }}>
                 <Text > <b>{comment.username}</b> {comment.content} </Text>
                 <Flex align="center" gap="20px">
