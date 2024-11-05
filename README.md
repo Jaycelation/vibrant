@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 19 40" src="https://github.com/user-attachments/assets/e22031ec-c2d6-4063-9622-73803fe83d69"># Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -39,32 +39,24 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+## Some Picture Demo
+Homepage
+<img width="1437" alt="Ảnh màn hình 2024-11-05 lúc 18 17 50" src="https://github.com/user-attachments/assets/ba9cbfc7-cb0f-4859-9a20-30227157c46c">
+Search Posts
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 18 14" src="https://github.com/user-attachments/assets/35794817-87f8-4066-ad45-97c837c46203">
+Comment Post
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 19 17" src="https://github.com/user-attachments/assets/f8c67ab4-cb8f-4547-9490-21dde0990ecd">
+Login
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 18 26" src="https://github.com/user-attachments/assets/6d1bfd7d-3a2c-4ddb-b540-1ca391c79b2e">
+Sign Up
+![Uploading Ảnh màn hình 2024-11-05 lúc 18.20.58.png…]()
+User Profile
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 19 59" src="https://github.com/user-attachments/assets/f691e170-2be6-4fd5-b79c-f51eb99c99d8">
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 19 40" src="https://github.com/user-attachments/assets/fd329ed0-f00d-49a8-8f83-37d5332a48da">
+<img width="1440" alt="Ảnh màn hình 2024-11-05 lúc 18 19 51" src="https://github.com/user-attachments/assets/23fdf73c-6634-4c8b-be5a-d3c456f34de8">
+View Friend posts and message with them
+<img width="1439" alt="Ảnh màn hình 2024-11-05 lúc 18 20 25" src="https://github.com/user-attachments/assets/ef5140f2-11ac-40c4-a7ad-f91ecd13e9e6">
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
