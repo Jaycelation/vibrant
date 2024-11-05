@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Flex, Typography, Empty, Tag } from "antd";
+import { Avatar, Button, Divider, Flex, Typography, Empty, Row, Col } from "antd";
 import PersonalPost from "../post/PersonalPost";
 import { useState, useContext, useEffect } from "react";
 import CreateNewPost from "../post/CreateNewPost";
@@ -122,21 +122,38 @@ const Friend = () => {
                     </div>
                 </div>
             </div>
-            <Flex justify="left" align="center" gap="2vw" style={{ width: "100%" }}>
-                <Avatar size={96} style={{ flexShrink: "0" }}>{friend.username.slice(0, 1).toUpperCase()}</Avatar>
-                <Flex vertical justify="left" gap="10px">
-                    <Flex justify="left" align="center" gap="10px"
+            <Row >
+                <Col xs={24} sm={24} md={6} lg={6} xl={6}
+                    style={{ display: "flex", justifyContent: "center", paddingRight: "20px" }}>
+                    {user.avatarUrl
+                        ?
+                        <Avatar size={96} style={{ flexShrink: "0" }} src={user.avatarUrl}></Avatar>
+                        :
+                        <Avatar size={96} style={{ flexShrink: "0" }}>{user.username !== "" ? user.username.slice(0, 1).toUpperCase() : ""}</Avatar>
+                    }
+                </Col>
+                <Col xs={24} sm={24} md={18} lg={18} xl={18}
+                    style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}
+                >
+                    <Flex justify="center" align="center" gap="10px"
                     >
-                        <Text style={{ fontWeight: "600", fontSize: "30px" }}>{friend.username.charAt(0).toUpperCase() + friend.username.slice(1)}</Text>
-                        <Text type="secondary" style={{ fontSize: "24px" }}> {friend.email}</Text>
+                        {user.username
+                            &&
+                            <>
+                                <Text style={{ fontWeight: "600", fontSize: "30px" }}>{user.username.charAt(0).toUpperCase() + user.username.slice(1)}</Text>
+                                <Text type="secondary" style={{ fontSize: "24px" }}> {user.email}</Text>
+                            </>
+                        }
+                    </Flex>
+                    <Flex justify="left" gap="1vw" align="flex-start" style={{ width: "100%" }} >
+                        <Button type="primary"
+                            onClick={() => { handleAddListBoxChat() }}
+                        > Chat</Button>
+                        <Button>View Profile</Button>
                     </Flex>
 
-                    <Button type="primary"
-                        onClick={() => { handleAddListBoxChat() }}
-                    >Chat</Button>
-
-                </Flex>
-            </Flex>
+                </Col>
+            </Row>
             <Divider />
 
             {

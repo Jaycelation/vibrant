@@ -67,7 +67,7 @@ const Homepage = () => {
                     }}
                     options={options}
                 />
-                <Flex gap="20px">
+                <Flex gap="0.5vw">
                     <Button type="primary"
                         onClick={() => { setIsCreateNewPost(true) }}
                     >{isCreateNewPost ? "Post" : "Create New"}</Button>

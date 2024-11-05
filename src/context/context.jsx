@@ -37,9 +37,11 @@ export const ContextWrapper = (props) => {
     const [listFriends, setListFriends] = useState([])
     const [isDisplayTags, setIsDisplayTags] = useState(false)
     useEffect(() => {
-        const dataUser = JSON.stringify(user)
-        localStorage.setItem('user', dataUser)
-    }, [user])
+        const dataUser = localStorage.getItem("user")
+        if (dataUser) {
+            setUser(JSON.parse(dataUser))
+        }
+    }, [])
 
     const reset = () => {
         setUser({
@@ -60,6 +62,15 @@ export const ContextWrapper = (props) => {
         })
         setListPersonalPost([])
         setListBoxChat([])
+        localStorage.setItem("user", JSON.stringify({
+            id: "",
+            username: "",
+            email: "",
+            accessToken: "",
+            friends: [],
+            avatarUrl: "",
+            tags: []
+        }))
     }
     return (
         <MainContext.Provider value={{

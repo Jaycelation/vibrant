@@ -60,7 +60,7 @@ const Header = () => {
 
         <Flex
             style={{
-                padding: "0 20px 0 20px",
+                padding: "0 2vw 0 2vw",
                 height: isHiddenHeader ? "0" : "50px",
                 backgroundColor: colorPrimary,
                 transition: "1s box-shadow,  300ms ease-in-out",
@@ -83,7 +83,7 @@ const Header = () => {
                 level={4} align='center'
                 onClick={() => { navigate("/") }}
             >Vibrant</Typography.Text>
-            <Flex gap="middle" justify='space-around' align='center'>
+            <Flex gap="15px" justify='space-between' align='center'>
                 <SearchOutlined style={{ color: colorTextBase, cursor: "pointer" }}
                     onClick={() => { navigate("/search") }}
                 />

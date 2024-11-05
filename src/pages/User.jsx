@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Flex, Typography, Empty, Tag } from "antd";
+import { Avatar, Button, Divider, Flex, Typography, Empty, Tag, Row, Col } from "antd";
 import PersonalPost from "../post/PersonalPost";
 import { useState, useContext, useEffect } from "react";
 import CreateNewPost from "../post/CreateNewPost";
@@ -130,16 +130,20 @@ const User = () => {
                     </div>
                 </div>
             }
-            <Flex justify="left" align="center" gap="2vw" style={{ width: "100%" }}>
-                {user.avatarUrl
-                    ?
-                    <Avatar size={96} style={{ flexShrink: "0" }} src={user.avatarUrl}></Avatar>
-                    :
-                    <Avatar size={96} style={{ flexShrink: "0" }}>{user.username !== "" ? user.username.slice(0, 1).toUpperCase() : ""}</Avatar>
-                }
-
-                <Flex vertical justify="left" style={{ width: "100%", }} gap="10px">
-                    <Flex justify="left" align="center" gap="10px"
+            <Row >
+                <Col xs={24} sm={24} md={6} lg={6} xl={6}
+                    style={{ display: "flex", justifyContent: "center", paddingRight: "20px" }}>
+                    {user.avatarUrl
+                        ?
+                        <Avatar size={96} style={{ flexShrink: "0" }} src={user.avatarUrl}></Avatar>
+                        :
+                        <Avatar size={96} style={{ flexShrink: "0" }}>{user.username !== "" ? user.username.slice(0, 1).toUpperCase() : ""}</Avatar>
+                    }
+                </Col>
+                <Col xs={24} sm={24} md={18} lg={18} xl={18}
+                    style={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center" }}
+                >
+                    <Flex justify="center" align="center" gap="10px"
                     >
                         {user.username
                             &&
@@ -149,7 +153,7 @@ const User = () => {
                             </>
                         }
                     </Flex>
-                    <Flex gap="10px">
+                    <Flex gap="1vw">
                         <Button type="primary"
                             onClick={() => { setIsCreateNewPost(true) }}
                         >Create New</Button>
@@ -160,8 +164,8 @@ const User = () => {
                             onClick={() => { setIsEditProfile(true) }}
                         > Edit profile</Button>
                     </Flex>
-                </Flex>
-            </Flex>
+                </Col>
+            </Row>
             <Divider />
 
             {

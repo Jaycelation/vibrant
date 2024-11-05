@@ -127,3 +127,10 @@ code {
     transform: translateX(0);
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .scroll-element span,.scroll-element-reverse span{
+    font-size: 42px;
+
+  }
+}
